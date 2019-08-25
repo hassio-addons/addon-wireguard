@@ -1,0 +1,15 @@
+#!/usr/bin/with-contenv bashio
+# ==============================================================================
+# Community Hass.io Add-ons: WireGuard
+# Runs WireGuard
+# ==============================================================================
+s6-svc -O /var/run/s6/services/wireguard
+
+bashio::log.info "Starting WireGuard..."
+
+# This is alpha software. We need to set this to instruct
+# WireGuard we are OK to go.
+export WG_I_PREFER_BUGGY_USERSPACE_TO_POLISHED_KMOD=1
+
+# Run the WireGuard
+exec wg-quick up wg0
