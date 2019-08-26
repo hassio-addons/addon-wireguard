@@ -17,6 +17,11 @@ declare pre_shared_key
 declare private_key
 declare public_key
 
+if ! bashio::fs.directory_exists '/ssl/wireguard'; then
+    mkdir -p /ssl/wireguard ||
+        bashio::exit.nok "Could create wireguard storage folder!"
+fi
+
 echo "[Interface]" > "${CONFIG}"
 
 # Add all server addresses to the configuration
@@ -113,7 +118,7 @@ for peer in $(bashio::config 'peers|keys'); do
 
     addresses=$(bashio::config "peers[${peer}].addresses | join(\", \")")
     dns=$(bashio::config "server.dns | join(\", \")")
-    public_key=$(wg pubkey < /data/private_key)
+    public_key=$(wg pubkey < /ssl/wireguard/private_key)
     host=$(bashio::config 'server.host')
     port=$(bashio::addon.port "51820/udp")
     allowed_ips=$(bashio::config "peers[${peer}].allowed_ips | join(\", \")")
