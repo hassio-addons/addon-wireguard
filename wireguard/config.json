@@ -36,8 +36,8 @@
         "10.10.0.1/16"
       ],
       "dns": [
-        "8.8.8.8",
-        "8.8.4.4"
+        "1.1.1.1",
+        "9.9.9.9"
       ]
     },
     "peers": [
@@ -58,7 +58,9 @@
       "host": "str",
       "addresses": ["str"],
       "dns": ["str"],
-      "private_key": "str?"
+      "private_key": "str?",
+      "post_up": "str?",
+      "post_down": "str?"
     },
     "peers": [
       {

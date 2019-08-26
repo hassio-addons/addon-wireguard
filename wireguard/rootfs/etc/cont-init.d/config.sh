@@ -16,6 +16,8 @@ declare port
 declare pre_shared_key
 declare private_key
 declare public_key
+declare post_up
+declare post_down
 
 if ! bashio::fs.directory_exists '/ssl/wireguard'; then
     mkdir -p /ssl/wireguard ||
@@ -23,6 +25,11 @@ if ! bashio::fs.directory_exists '/ssl/wireguard'; then
 fi
 
 echo "[Interface]" > "${CONFIG}"
+
+# Check if at least 1 address is specified
+if ! bashio::config.has_value 'server.addresses'; then
+    bashio::exit.nok 'You need at least 1 address configured for the server'
+fi
 
 # Add all server addresses to the configuration
 for address in $(bashio::config 'server.addresses'); do
@@ -46,11 +53,45 @@ else
     private_key=$(</ssl/wireguard/private_key)
 fi
 
+# Post Up & Down defaults
+post_up="iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE"
+post_down="iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE"
+if [[ $(</proc/sys/net/ipv4/ip_forward) -eq 0 ]]; then
+    bashio::log.warning
+    bashio::log.warning "IP forwarding is disabled on the host system!"
+    bashio::log.warning "You can still use WireGuard to access Hass.io,"
+    bashio::log.warning "however, you cannot access your home network or"
+    bashio::log.warning "the internet via the VPN tunnel."
+    bashio::log.warning
+    bashio::log.warning "Please consult the add-on documentation on how"
+    bashio::log.warning "to resolve this."
+    bashio::log.warning
+
+    # Set fake placeholders for Up & Down commands
+    post_up="true"
+    post_down="true"
+fi
+
+# Load custom PostUp setting if provided
+if bashio::config.has_value 'server.post_up'; then
+    post_up=$(bashio::config 'server.post_up')
+fi
+
+# Load custom PostDown setting if provided
+if bashio::config.has_value 'server.post_down'; then
+    post_down=$(bashio::config 'server.post_down')
+fi
+
+# Finish up the configuration
 {
     echo "PrivateKey = ${private_key}";
 
     # Adds server port to the configuration
     echo "ListenPort = 51820";
+
+    # Post up & down
+    echo "PostUp = ${post_up}";
+    echo "PostDown = ${post_down}";
 
     # End configuration file with an empty line
     echo "";
