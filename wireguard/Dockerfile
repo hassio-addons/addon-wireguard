@@ -26,7 +26,9 @@ RUN \
     && make install \
     \
     && rm -f -r /tmp/* \
-    && apk del --no-cache --purge .build-dependencies
+    && apk del --no-cache --purge \
+        .build-dependencies \
+        go
 
 # Copy root filesystem
 COPY rootfs /
