@@ -4,6 +4,7 @@
 # Creates the interface configuration
 # ==============================================================================
 readonly CONFIG="/etc/wireguard/wg0.conf"
+declare -a list
 declare addresses
 declare allowed_ips
 declare config_dir
@@ -13,11 +14,11 @@ declare host
 declare keep_alive
 declare name
 declare port
+declare post_down
+declare post_up
 declare pre_shared_key
 declare private_key
 declare public_key
-declare post_up
-declare post_down
 
 if ! bashio::fs.directory_exists '/ssl/wireguard'; then
     mkdir -p /ssl/wireguard ||
@@ -33,6 +34,7 @@ fi
 
 # Add all server addresses to the configuration
 for address in $(bashio::config 'server.addresses'); do
+    [[ "${address}" == *"/"* ]] || address="${address}/24"
     echo "Address = ${address}" >> "${CONFIG}"
 done
 
@@ -138,7 +140,13 @@ for peer in $(bashio::config 'peers|keys'); do
     echo "PublicKey = ${public_key}" >> "${CONFIG}"
 
     # Addresses in peer configuration become AllowedIPS from server side.
-    allowed_ips=$(bashio::config "peers[${peer}].addresses | join(\", \")")
+    list=()
+    for address in $(bashio::config "peers[${peer}].addresses"); do
+        [[ "${address}" == *"/"* ]] || address="${address}/24"
+        list+=("${address}")
+    done
+    allowed_ips=$(IFS=", "; echo "${list[*]}")
+
     echo "AllowedIPs = ${allowed_ips}" >> "${CONFIG}"
 
     if bashio::config.has_value "peers[${peer}].persistent_keep_alive"; then

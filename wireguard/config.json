@@ -32,7 +32,7 @@
     "server": {
       "host": "hassio.local",
       "addresses": [
-        "172.244.66.2/24"
+        "172.244.66.1"
       ],
       "dns": []
     },
@@ -40,7 +40,7 @@
         {
           "name": "hassio",
           "addresses": [
-            "172.244.66.3/24"
+            "172.244.66.2"
           ],
           "allowed_ips": []
         }
