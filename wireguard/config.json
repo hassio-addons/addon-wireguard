@@ -42,7 +42,8 @@
           "addresses": [
             "172.244.66.2"
           ],
-          "allowed_ips": []
+          "allowed_ips": [],
+          "client_allowed_ips": []
         }
     ]
   },
@@ -53,15 +54,18 @@
       "addresses": ["str"],
       "dns": ["str"],
       "private_key": "str?",
+      "public_key": "str?",
       "post_up": "str?",
       "post_down": "str?"
     },
     "peers": [
       {
         "name": "match(^!secret [a-zA-Z0-9_\\-]+$|^[a-zA-Z0-9\\d](?:[a-zA-Z0-9\\d]|-(?=[a-zA-Z0-9\\d])){0,32}$)",
+        "private_key": "str?",
         "public_key": "str?",
         "addresses": ["str"],
         "allowed_ips": ["str"],
+        "client_allowed_ips": ["str"],
         "persistent_keep_alive": "int?",
         "endpoint": "str?",
         "pre_shared_key": "str?"
