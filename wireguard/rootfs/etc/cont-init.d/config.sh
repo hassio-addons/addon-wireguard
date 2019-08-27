@@ -139,7 +139,7 @@ for peer in $(bashio::config 'peers|keys'); do
     peer_private_key=""
     if bashio::config.has_value "peers[${peer}].private_key"; then
         peer_private_key=$(bashio::config "peers[${peer}].private_key")
-    elif ! basio::config.has_value "peers[${peer}].public_key"; then
+    elif ! bashio::config.has_value "peers[${peer}].public_key"; then
         # If a public key is not provided, try get a private key from disk
         # or generate one if needed.
         if ! bashio::fs.file_exists '/ssl/wireguard/private_key'; then
