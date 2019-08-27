@@ -37,9 +37,14 @@ for address in $(bashio::config 'server.addresses'); do
 done
 
 # Add all server DNS addresses to the configuration
-for dns in $(bashio::config 'server.dns'); do
-    echo "DNS = ${dns}" >> "${CONFIG}"
-done
+if bashio::config.has_value 'server.dns'; then
+    for dns in $(bashio::config 'server.dns'); do
+        echo "DNS = ${dns}" >> "${CONFIG}"
+    done
+else
+    dns=$(bashio::dns.host)
+    echo "DNS = ${dns}" >> ${CONFIG}
+fi
 
 # Add the server's private key to the configuration
 if bashio::config.has_value 'server.private_key'; then
@@ -100,6 +105,11 @@ fi
 # Fetch all the peers
 for peer in $(bashio::config 'peers|keys'); do
 
+    # Check if at least 1 address is specified
+    if ! bashio::config.has_value "peers[${peer}].addresses"; then
+        bashio::exit.nok "You need at least 1 address configured for ${name}"
+    fi
+
     name=$(bashio::config "peers[${peer}].name")
     config_dir="/ssl/wireguard/${name}"
 
@@ -157,12 +167,22 @@ for peer in $(bashio::config 'peers|keys'); do
         echo "PrivateKey = ${private_key}" >> "${config_dir}/client.conf"
     fi
 
+    if bashio::config.has_value 'server.dns'; then
+        dns=$(bashio::config "server.dns | join(\", \")")
+    else
+        dns=$(bashio::dns.host)
+    fi
+
+    if bashio::config.has_value "peers[${peer}].allowed_ips"; then
+        allowed_ips=$(bashio::config "peers[${peer}].allowed_ips | join(\", \")")
+    else
+        allowed_ips="0.0.0.0/0"
+    fi
+
     addresses=$(bashio::config "peers[${peer}].addresses | join(\", \")")
-    dns=$(bashio::config "server.dns | join(\", \")")
     public_key=$(wg pubkey < /ssl/wireguard/private_key)
     host=$(bashio::config 'server.host')
     port=$(bashio::addon.port "51820/udp")
-    allowed_ips=$(bashio::config "peers[${peer}].allowed_ips | join(\", \")")
 
     {
         echo "Address = ${addresses}"
