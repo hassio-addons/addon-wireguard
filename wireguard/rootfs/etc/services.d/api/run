@@ -1,0 +1,52 @@
+#!/usr/bin/with-contenv bashio
+# ==============================================================================
+# Community Hass.io Add-ons: WireGuard
+# The most simple HTTP API you've ever seen.
+# Provides status of WireGuard peers.
+# ==============================================================================
+declare -a peers
+declare endpoint
+declare json
+declare latest_handshake
+declare line
+declare name
+declare peer
+declare public_key
+declare transfer_rx
+declare transfer_tx
+
+while true; do
+    # Get information from wg
+    peers=()
+    while IFS=$'\t' read -r -a line; do
+        if [[ "${#line[@]}" -gt 6 ]]; then
+            endpoint="${line[3]}"
+            latest_handshake="${line[5]}"
+            public_key="${line[1]}"
+            transfer_rx="${line[6]}"
+            transfer_tx="${line[7]}"
+
+            peer=$(bashio::var.json \
+                    'endpoint' "${endpoint}" \
+                    'latest_handshake' "^${latest_handshake}" \
+                    'transfer_rx' "^${transfer_rx}" \
+                    'transfer_tx' "^${transfer_tx}")
+
+            filename=$(sha1sum <<< "${public_key}" | awk '{ print $1 }')
+            if bashio::fs.file_exists "/var/lib/wireguard/${filename}"; then
+                name=$(<"/var/lib/wireguard/${filename}")
+                peers+=("${name}")
+                peers+=("^${peer}")
+            fi
+        fi
+    done <<< "$(wg show all dump)"
+
+    # Build final json content
+    json="{}"
+    if [[ "${#peers[@]}" -ne 0 ]]; then
+        json=$(bashio::var.json "${peers[@]}")
+    fi
+
+    echo -e "HTTP/1.1 200 OK\r\nContent-type: application/json\r\n\r\n${json}" \
+        | nc -l -p 80 > /dev/null
+done
