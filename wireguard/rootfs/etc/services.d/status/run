@@ -3,6 +3,6 @@
 # Community Hass.io Add-ons: WireGuard
 # Shows current WireGuard status
 # ==============================================================================
-sleep 15
+sleep 30
 bashio::log.info "Requesting current status from WireGuard..."
 exec wg show
