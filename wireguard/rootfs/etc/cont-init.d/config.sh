@@ -3,25 +3,30 @@
 # Community Hass.io Add-ons: WireGuard
 # Creates the interface configuration
 # ==============================================================================
-readonly CONFIG="/etc/wireguard/wg0.conf"
 declare -a list
 declare addresses
 declare allowed_ips
+declare config
 declare config_dir
 declare dns
 declare endpoint
+declare filename
+declare fwmark
 declare host
 declare keep_alive
+declare mtu
 declare name
 declare peer_private_key
 declare peer_public_key
 declare port
 declare post_down
 declare post_up
+declare pre_down
 declare pre_shared_key
+declare pre_up
 declare server_private_key
 declare server_public_key
-declare filename
+declare table
 
 if ! bashio::fs.directory_exists '/ssl/wireguard'; then
     mkdir -p /ssl/wireguard ||
@@ -71,6 +76,12 @@ else
     server_public_key=$(wg pubkey <<< "${server_private_key}")
 fi
 
+fwmark=$(bashio::config "server.fwmark")
+mtu=$(bashio::config "mtu")
+pre_down=$(bashio::config "server.pre_down")
+pre_up=$(bashio::config "server.pre_up")
+table=$(bashio::config "server.table")
+
 # Post Up & Down defaults
 post_up="iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE"
 post_down="iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE"
@@ -107,9 +118,22 @@ fi
     # Adds server port to the configuration
     echo "ListenPort = 51820"
 
+    # Custom routing table
+    bashio::config.has_value "server.table" && echo "Table = ${table}"
+
+    # Pre up & down
+    bashio::config.has_value "server.pre_up" && echo "PreUp = ${pre_up}"
+    bashio::config.has_value "server.pre_down" && echo "PreDown = ${pre_down}"
+
     # Post up & down
     bashio::var.has_value "${post_up}" && echo "PostUp = ${post_up}"
     bashio::var.has_value "${post_down}" && echo "PostDown = ${post_down}"
+
+    # fwmark for outgoing packages
+    bashio::config.has_value "server.fwmark" && echo "FwMark = ${fwmark}"
+
+    # Custom MTU setting
+    bashio::config.has_value "server.mtu" && echo "MTU = ${mtu}"
 
     # End configuration file with an empty line
     echo ""
@@ -136,11 +160,11 @@ for peer in $(bashio::config 'peers|keys'); do
 
     name=$(bashio::config "peers[${peer}].name")
     config_dir="/ssl/wireguard/${name}"
+    endpoint=$(bashio::config "peers[${peer}].endpoint")
+    fwmark=$(bashio::config "peers[${peer}].fwmark")
     host=$(bashio::config 'server.host')
     port=$(bashio::addon.port "51820/udp")
-    keep_alive=$(bashio::config "peers[${peer}].persistent_keep_alive")
     pre_shared_key=$(bashio::config "peers[${peer}].pre_shared_key")
-    endpoint=$(bashio::config "peers[${peer}].endpoint")
 
     # Create directory for storing client configuration
     mkdir -p "${config_dir}" ||
@@ -221,6 +245,8 @@ for peer in $(bashio::config 'peers|keys'); do
             && echo "PrivateKey = ${peer_private_key}"
         echo "Address = ${addresses}"
         echo "DNS = ${dns}"
+        bashio::config.has_value "peers[${peer}].fwmark" \
+            && echo "FwMark = ${fwmark}"
         echo ""
         echo "[Peer]"
         echo "PublicKey = ${server_public_key}"

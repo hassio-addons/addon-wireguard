@@ -60,8 +60,13 @@
       "dns": ["str"],
       "private_key": "str?",
       "public_key": "str?",
+      "fwmark": "str?",
+      "table": "str?",
+      "pre_up": "str?",
+      "pre_down": "str?",
       "post_up": "str?",
-      "post_down": "str?"
+      "post_down": "str?",
+      "mtu": "int?"
     },
     "peers": [
       {
@@ -73,7 +78,8 @@
         "client_allowed_ips": ["str"],
         "persistent_keep_alive": "int?",
         "endpoint": "str?",
-        "pre_shared_key": "str?"
+        "pre_shared_key": "str?",
+        "fwmark": "str?"
       }
     ]
   }
