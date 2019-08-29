@@ -142,6 +142,10 @@ for peer in $(bashio::config 'peers|keys'); do
     pre_shared_key=$(bashio::config "peers[${peer}].pre_shared_key")
     endpoint=$(bashio::config "peers[${peer}].endpoint")
 
+    # Create directory for storing client configuration
+    mkdir -p "${config_dir}" ||
+        bashio::exit.nok "Failed creating client folder for ${name}"
+
     # Get the private key
     peer_private_key=""
     if bashio::config.has_value "peers[${peer}].private_key"; then
@@ -201,8 +205,6 @@ for peer in $(bashio::config 'peers|keys'); do
     } >> "${CONFIG}"
 
     # Generate client configuration
-    mkdir -p "${config_dir}" ||
-        bashio::exit.nok "Failed creating client folder for ${name}"
 
     # Determine allowed IPs for client configuration
     allowed_ips="0.0.0.0/0"
