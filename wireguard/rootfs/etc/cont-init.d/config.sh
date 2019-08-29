@@ -222,13 +222,18 @@ for peer in $(bashio::config 'peers|keys'); do
         allowed_ips=$(IFS=", "; echo "${list[*]}")
     fi
 
+    # Determine persistent keep alive
+    keep_alive=25
+    if bashio::config.has_value "peers[${peer}].persistent_keep_alive"; then
+        keep_alive=$(bashio::config "peers[${peer}].persistent_keep_alive")
+    fi
+
     # Start writing peer information in server config
     {
         echo "[Peer]"
         echo "PublicKey = ${peer_public_key}"
         echo "AllowedIPs = ${allowed_ips}"
-        bashio::config.has_value "peers[${peer}].persistent_keep_alive" \
-            && echo "PersistentKeepalive = ${keep_alive}"
+        echo "PersistentKeepalive = ${keep_alive}"
         bashio::config.has_value "peers[${peer}].pre_shared_key" \
             && echo "PreSharedKey = ${pre_shared_key}"
         bashio::config.has_value "peers[${peer}].endpoint" \
@@ -260,6 +265,7 @@ for peer in $(bashio::config 'peers|keys'); do
         echo "PublicKey = ${server_public_key}"
         echo "Endpoint = ${host}:${port}"
         echo "AllowedIPs = ${allowed_ips}"
+        echo "PersistentKeepalive = ${keep_alive}"
         echo ""
     } > "${config_dir}/client.conf"
 
