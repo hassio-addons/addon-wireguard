@@ -25,20 +25,20 @@ WireGuard: fast, modern, secure VPN tunnel.
 
 ## About
 
-WireGuard® is an extremely simple yet fast and modern VPN that utilizes
-state-of-the-art cryptography. It aims to be faster, simpler, leaner,
+[WireGuard®][wireguard] is an extremely simple yet fast and modern VPN that
+utilizes state-of-the-art cryptography. It aims to be faster, simpler, leaner,
 and more useful than IPsec, while avoiding the massive headache.
 
 It intends to be considerably more performant than OpenVPN. WireGuard is
-designed as a general purpose VPN for running on embedded interfaces and
-super computers alike, fit for many different circumstances.
+designed as a general-purpose VPN for running on embedded interfaces and
+supercomputers alike, fit for many different circumstances.
 
 Initially released for the Linux kernel, it is now cross-platform (Windows,
 macOS, BSD, iOS, Android) and widely deployable,
 including via an Hass.io add-on!
 
 WireGuard is currently under heavy development, but already it might be
-regarded as the most secure, easiest to use, and simplest VPN solution
+regarded as the most secure, easiest to use, and the simplest VPN solution
 in the industry.
 
 ## Installation
@@ -69,7 +69,11 @@ This is an installation manual & quick start:
 
 ## Configuration
 
-**Note**: _Remember to restart the add-on when the configuration is changed._
+Now, for starters, don't get scared by the number of options and difficult
+terms this add-on provides. WireGuard is a complex machine, but the
+add-on only has a few, simple, required settings. All the rest is handled by
+the add-on. However, If you would like to set up a more complex configuration,
+the add-on would allow that to.
 
 If you are familiar with WireGuard, please note the following:
 The configuration of WireGuard looks very similar to all terms used in the
@@ -77,17 +81,15 @@ WireGuard configuration. There is, however, one big difference: The
 add-on is able to generate configurations for the add-on, but also for the
 peers (clients).
 
-Furthermore, the add-on takes care of a lot of default settings handling
-for you. By default, only some basic settings are shown in the configuration
-section of the add-on. However, more WireGuard setting are available!
+**Note**: _Remember to restart the add-on when the configuration is changed._
 
-An more extensive example add-on configuration, please do not copy paste.
+A little more extensive example add-on configuration:
 
 ```json
 {
   "log_level": "info",
   "server": {
-    "host": "hassio.local",
+    "host": "myserver.duckdns.org",
     "addresses": [
       "10.10.10.1"
     ],
@@ -108,7 +110,7 @@ An more extensive example add-on configuration, please do not copy paste.
       {
         "name": "ninja",
         "addresses": [
-          "10.10.10.2"
+          "10.10.10.3"
         ],
         "allowed_ips": [],
         "client_allowed_ips": [
@@ -144,8 +146,8 @@ that for the add-on.
 ### Option: `server.dns` _(optional)_
 
 A list of DNS servers used by the add-on and the configuration generated for
-the clients. This configuration option is optional, if no DNS servers are
-set, it will use the build-in DNS server from Hass.io.
+the clients. This configuration option is optional, and if no DNS servers are
+set, it will use the built-in DNS server from Hass.io.
 
 If you are running the [AdGuard][adguard] or [Pi-hole][pihole] add-on, you can
 add the internal IP address of your Hass.io system to the list. This will
@@ -168,14 +170,35 @@ If you don't supply one, the add-on will calculate one based on the private
 key that was supplied via the `server.private_key` or, in case no private key
 was supplied, calculated it from the generated private key.
 
+### Option: `server.fwmark` _(optional)_
+
+A 32-bit fwmark for outgoing packets.
+May be specified in hexadecimal by prepending "0x".
+
+### Option: `server.table` _(optional)_
+
+Controls the routing table to which routes are added. Setting it to `off`
+disables the creation of routes altogether. When not provided, the add-on
+adds routes to the default table and enables special handling of default routes.
+
+### Option: `server.pre_up` _(optional)_
+
+Allows you to run commands before WireGuard is started. This is useful
+for modifying things like routing.
+
+### Option: `server.pre_down` _(optional)_
+
+Allows you to run commands before WireGuard is stopped. This is useful
+for modifying things like routing.
+
 ### Option: `server.post_up` _(optional)_
 
 Allows you to run commands after WireGuard has been started. This is useful
-for modifing things like routing. If not provided, the add-on will by default
+for modifying things like routing. If not provided, the add-on will by default
 route all traffic coming in from the VPN through your home network.
 
 If you like to disable that, setting this option to `true` (yes, true), will
-disable that behaviour.
+disable that behavior.
 
 By default it executes the following:
 
@@ -186,11 +209,11 @@ iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE`
 ### Option: `server.post_down` _(optional)_
 
 Allows you to run commands after WireGuard has been stopped. This is useful
-for modifing things like routing. If not provided, the add-on will by default
+for modifying things like routing. If not provided, the add-on will by default
 remove the default rules created by the `post_up` defaults.
 
 If you like to disable that, setting this option to `true` (yes, true), will
-disable that behaviour.
+disable that behavior.
 
 By default it executes the following:
 
@@ -198,14 +221,22 @@ By default it executes the following:
 iptables -D FORWARD -o %i -j ACCEPT;
 iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE`
 
+### Option: `server.mtu`
+
+The MTU is automatically determined from the endpoint addresses or the
+system default route, which is usually a sane choice.
+
+However, to manually specify an MTU to override this automatic discovery,
+this value may be specified explicitly.
+
 ### Option: `peers.name`
 
 This is an identifier for you. It helps you to know what this peer is, e.g.,
 `myphone`, `mylaptop`, `ninja`.
 
 This name is also used for creating the directory in `/ssl/wireguard` where
-the generated client configuration and QR codes are stored. Therefor, a name
-has a maximum of 32 characters, can only contains A-Z (or a-z) and 0-9.
+the generated client configuration and QR codes are stored. Therefore, a name
+has a maximum of 32 characters, can only contain A-Z (or a-z) and 0-9.
 Names contain a hyphen (-) but must not start or end with one.
 
 ### Option: `peers.addresses`
@@ -214,7 +245,7 @@ A list of IP (ipv4 or ipv6) addresses (optionally with CIDR masks) to be
 assigned to the peer.
 
 This is used in the client configuration, but also for used by the add-on to
-set the allowed IPs (unless override by the `peers.allowed_ips` option.)
+set the allowed IPs (unless overriden by the `peers.allowed_ips` option.)
 
 ### Option: `peers.private_key` _(optional)_
 
@@ -263,8 +294,8 @@ this peer is directed.
 The catch-all `0.0.0.0/0` may be specified for matching all IPv4 addresses,
 and `::/0` may be specified for matching all IPv6 addresses.
 
-If not configured, the add-on will use `0.0.0.0/0` in the generate client
-configuration, routing all traffic on your client though the VPN tunnel.
+If not configured, the add-on will use `0.0.0.0/0` in the generated client
+configuration, routing all traffic on your client through the VPN tunnel.
 
 ### Option: `peers.persistent_keep_alive` _(optional)_
 
@@ -296,6 +327,14 @@ A base64 preshared key generated by `wg genpsk`. This option adds an additional
 layer of symmetric-key cryptography to be mixed into the already existing
 public-key cryptography, for post-quantum resistance.
 
+### Option: `peers.fwmark` _(optional)_
+
+**This configuration only valid for the peer end/client configuration and does
+not affect the server/add-on!**
+
+A 32-bit fwmark for outgoing packets.
+May be specified in hexadecimal by prepending "0x".
+
 ### Option: `log_level` _(optional)_
 
 The `log_level` option controls the level of log output by the addon and can
@@ -320,11 +359,11 @@ All generated files are stored in `/ssl/wireguard`. This includes the
 client configurations generated by this add-on.
 
 Each peer/client will have its own folder, by the name specified in the
-add-on configuration. The add-on additionally generates a image for each
+add-on configuration. The add-on additionally generates an image for each
 client containing a QR code, to allow a quick an easy set up on, e.g., your
 mobile phone.
 
-## Running this add-on on a Generic/Debian/Ubuntu based Hass.io
+## Running this add-on on a Generic/Debian/Ubuntu-based Hass.io
 
 The HassOS operating system for Hass.io by default has installed WireGuard
 support in its Linux kernel. However, if you run Hass.io on a generic Linux
@@ -335,7 +374,7 @@ This will cause the add-on to throw a large warning during the start up.
 However, the add-on will work as advertised!
 
 When this happens, the add-on falls back on a standalone instance of WireGuard
-running inside the add-on itself. This method has drawback in terms of
+running inside the add-on itself. This method has drawbacks in terms of
 performance.
 
 In order to run WireGuard optimal, you should install WireGuard on your
@@ -368,7 +407,7 @@ sudo dnf install wireguard-dkms wireguard-tools
 ### Other
 
 If you have a different operating system on which you run Hass.io on, please
-consult [WireGuard installation manul][wireguard-install]
+consult [WireGuard installation manual][wireguard-install]
 
 ## _"Missing WireGuard kernel module. Falling back to slow userspace implementation."_
 
@@ -385,6 +424,15 @@ and then forwards it accordingly.
 Basically, it allows for data coming in from your VPN client will be routed to
 other places like your home network, or the internet.
 
+To enable IP forwarding, run the following commands directly on your **host**
+system (e.g., Ubuntu, Debian).
+
+```bash
+sudo sysctl -w net.ipv4.ip_forward=1
+sudo echo "net.ipv4.ip_forward = 1" > /etc/sysctl.conf
+sudo sysctl -p /etc/sysctl.conf
+```
+
 ## Snapshots
 
 The WireGuard add-on can be backed up using Hass.io snapshots. There is one
@@ -392,12 +440,29 @@ caveat to take into account: A partial snapshot of the add-on DOES NOT contain
 the generated client configurations, including their public/private keys.
 
 Client configurations are stored in the `/ssl/wireguard` folder. If you
-use partial snapshots, please besure to backup both the `ssl` folder and the
+use partial snapshots, please be sure to backup both the `ssl` folder and the
 add-on.
 
 ## WireGuard status API
 
-Lorem ipsum.
+This add-on provides a simple WireGuard status API. This API is not an
+official API, darn simple, and experimental, but does allow you to pull
+in data from the add-on into Home Assistant.
+
+With the use of the [Home Assistant RESTful][ha-rest] integration, one should
+be able to grab some interesting data from this add-on.
+
+Example:
+
+```yaml
+sensor:
+  - platform: rest
+    resource: http://a0d7b954-wireguard
+```
+
+At this moment, we do not have template or examples on how this could be
+used effectively with Home Assistant.
+If you have, sharing would be appreciated!
 
 ## Changelog & Releases
 
@@ -477,6 +542,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 [aarch64-shield]: https://img.shields.io/badge/aarch64-yes-green.svg
+[adguard]: https://github.com/hassio-addons/addon-adguard-home
 [amd64-shield]: https://img.shields.io/badge/amd64-yes-green.svg
 [armhf-shield]: https://img.shields.io/badge/armhf-yes-green.svg
 [armv7-shield]: https://img.shields.io/badge/armv7-yes-green.svg
@@ -494,6 +560,7 @@ SOFTWARE.
 [frenck]: https://github.com/frenck
 [gitlabci-shield]: https://gitlab.com/hassio-addons/addon-wireguard/badges/master/pipeline.svg
 [gitlabci]: https://gitlab.com/hassio-addons/addon-wireguard/pipelines
+[ha-rest]: https://www.home-assistant.io/components/rest/
 [home-assistant]: https://home-assistant.io
 [i386-shield]: https://img.shields.io/badge/i386-yes-green.svg
 [issue]: https://github.com/hassio-addons/addon-wireguard/issues
@@ -502,12 +569,12 @@ SOFTWARE.
 [maintenance-shield]: https://img.shields.io/maintenance/yes/2019.svg
 [patreon-shield]: https://www.frenck.nl/images/patreon.png
 [patreon]: https://www.patreon.com/
+[pihole]: https://github.com/hassio-addons/addon-pi-hole
 [project-stage-shield]: https://img.shields.io/badge/project%20stage-experimental-yellow.svg
 [reddit]: https://reddit.com/r/homeassistant
 [releases-shield]: https://img.shields.io/github/release/hassio-addons/addon-wireguard.svg
 [releases]: https://github.com/hassio-addons/addon-wireguard/releases
 [repository]: https://github.com/hassio-addons/repository
 [semver]: http://semver.org/spec/v2.0.0.htm
-[adguard]: https://github.com/hassio-addons/addon-adguard-home
-[pihole]: https://github.com/hassio-addons/addon-pi-hole
 [wireguard-install]: https://www.wireguard.com/install/
+[wireguard]: https://www.wireguard.com
