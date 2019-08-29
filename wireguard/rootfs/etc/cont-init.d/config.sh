@@ -62,7 +62,7 @@ if bashio::config.has_value 'server.dns'; then
     done
 else
     dns=$(bashio::dns.host)
-    echo "DNS = ${dns}" >> ${config}
+    echo "DNS = ${dns}" >> "${config}"
 fi
 
 # Get the server's private key
