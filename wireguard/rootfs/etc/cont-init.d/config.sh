@@ -13,6 +13,7 @@ declare endpoint
 declare filename
 declare fwmark
 declare host
+declare interface
 declare keep_alive
 declare mtu
 declare name
@@ -33,8 +34,15 @@ if ! bashio::fs.directory_exists '/ssl/wireguard'; then
         bashio::exit.nok "Could create wireguard storage folder!"
 fi
 
+# Get interface and config file location
+interface="wg0"
+if bashio::config.has_value "server.interface"; then
+    interface=$(bashio::config "server.interface")
+fi
+config="/etc/wireguard/${interface}.conf"
+
 # Start creation of configuration
-echo "[Interface]" > "${CONFIG}"
+echo "[Interface]" > "${config}"
 
 # Check if at least 1 address is specified
 if ! bashio::config.has_value 'server.addresses'; then
@@ -44,17 +52,17 @@ fi
 # Add all server addresses to the configuration
 for address in $(bashio::config 'server.addresses'); do
     [[ "${address}" == *"/"* ]] || address="${address}/24"
-    echo "Address = ${address}" >> "${CONFIG}"
+    echo "Address = ${address}" >> "${config}"
 done
 
 # Add all server DNS addresses to the configuration
 if bashio::config.has_value 'server.dns'; then
     for dns in $(bashio::config 'server.dns'); do
-        echo "DNS = ${dns}" >> "${CONFIG}"
+        echo "DNS = ${dns}" >> "${config}"
     done
 else
     dns=$(bashio::dns.host)
-    echo "DNS = ${dns}" >> ${CONFIG}
+    echo "DNS = ${dns}" >> ${config}
 fi
 
 # Get the server's private key
@@ -137,7 +145,7 @@ fi
 
     # End configuration file with an empty line
     echo ""
-} >> "${CONFIG}"
+} >> "${config}"
 
 # Get DNS for client configurations
 if bashio::config.has_value 'server.dns'; then
@@ -226,7 +234,7 @@ for peer in $(bashio::config 'peers|keys'); do
         bashio::config.has_value "peers[${peer}].endpoint" \
             && echo "Endpoint = ${endpoint}"
         echo ""
-    } >> "${CONFIG}"
+    } >> "${config}"
 
     # Generate client configuration
 
