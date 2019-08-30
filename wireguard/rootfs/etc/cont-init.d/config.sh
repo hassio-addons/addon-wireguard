@@ -185,7 +185,7 @@ for peer in $(bashio::config 'peers|keys'); do
     elif ! bashio::config.has_value "peers[${peer}].public_key"; then
         # If a public key is not provided, try get a private key from disk
         # or generate one if needed.
-        if ! bashio::fs.file_exists '/ssl/wireguard/private_key'; then
+        if ! bashio::fs.file_exists "${config_dir}/private_key"; then
             umask 077 || bashio::exit.nok "Could not set a proper umask"
             wg genkey > "${config_dir}/private_key" ||
                 bashio::exit.nok "Could not generate private key for ${name}!"
