@@ -43,26 +43,27 @@ in the industry.
 
 ## Installation
 
-The installation of this add-on is pretty straightforward and not different in
-comparison to installing any other Hass.io add-on.
+WireGuard is pretty simple, however, can be quite complex for user that isn't
+familiar with all terminology used. The add-on takes care of a lot of things
+for you (if you want).
 
-This is an installation manual & quick start:
+Follow the following steps for installation & a quick start:
 
 1. [Add our Hass.io add-ons repository][repository] to your Hass.io instance.
-1. Install the "WireGuard" add-on.
-1. Set the `host` configuration option to your Hass.io (external) address,
+2. Install the "WireGuard" add-on.
+3. Set the `host` configuration option to your Hass.io (external) address,
     e.g., `myhome.duckdns.org`.
-1. Change the name of the peer to something useful, e.g., `myphone`.
-1. Save the configuration.
-1. Start the "WireGuard" add-on
-1. Check the logs of the "WireGuard" add-on to see if everything went well.
-1. Forward port `51820` (UDP!) in your router to your Hass.io IP.
-1. Download/Open the file `/ssl/wireguard/myphone/qrcode.png` stored on your
+4. Change the name of the peer to something useful, e.g., `myphone`.
+5. Save the configuration.
+6. Start the "WireGuard" add-on
+7. Check the logs of the "WireGuard" add-on to see if everything went well.
+8. Forward port `51820` (UDP!) in your router to your Hass.io IP.
+9. Download/Open the file `/ssl/wireguard/myphone/qrcode.png` stored on your
    Hass.io machine, e.g., using Samba, Visual Studio Code or the Configurator
    add-on.
-1. Install the WireGuard app on your phone.
-1. Add a new WireGuard connection to your phone, by scanning the QR code.
-1. Connect!
+10. Install the WireGuard app on your phone.
+11. Add a new WireGuard connection to your phone, by scanning the QR code.
+12. Connect!
 
 **NOTE**: Do not add this repository to Hass.io, please use:
 `https://github.com/hassio-addons/repository`.
@@ -70,10 +71,10 @@ This is an installation manual & quick start:
 ## Configuration
 
 Now, for starters, don't get scared by the number of options and difficult
-terms this add-on provides. WireGuard is a complex machine, but the
-add-on only has a few, simple, required settings. All the rest is handled by
-the add-on. However, If you would like to set up a more complex configuration,
-the add-on would allow that to.
+terms this add-on provides. WireGuard can be a complex piece of software,
+but the add-on only has a few, simple, required settings. All the rest is
+handled by the add-on. However, If you would like to set up a more complex
+configuration, the add-on would allow that to.
 
 If you are familiar with WireGuard, please note the following:
 The configuration of WireGuard looks very similar to all terms used in the
@@ -109,6 +110,7 @@ A little more extensive example add-on configuration:
       }
       {
         "name": "ninja",
+        "public_key": "QNLXV8lrsPnKOd011DO8g5DWyad6iHJDSVOD6yOqjiE=",
         "addresses": [
           "10.10.10.3"
         ],
@@ -136,11 +138,11 @@ work.
 
 ### Option: `server.addresses`
 
-A list of IP (ipv4 or ipv6) addresses (optionally with CIDR masks) to be
+A list of IP (IPv4 or IPv6) addresses (optionally with CIDR masks) to be
 assigned to the server/add-on interface.
 
 It is strongly advised to create/use a separate IP address space from your
-home network, e.g., if your home network uses `192.168.1.x` then DON'T use
+home network, e.g., if your home network uses `192.168.1.x` then DO NOT use
 that for the add-on.
 
 ### Option: `server.dns` _(optional)_
@@ -168,12 +170,13 @@ from a private key. This option supports the use of `!secret`.
 
 If you don't supply one, the add-on will calculate one based on the private
 key that was supplied via the `server.private_key` or, in case no private key
-was supplied, calculated it from the generated private key.
+was supplied, calculate it from the generated private key.
 
 ### Option: `server.fwmark` _(optional)_
 
-A 32-bit fwmark for outgoing packets.
-May be specified in hexadecimal by prepending "0x".
+A 32-bit fwmark for outgoing packets. May be specified in hexadecimal by
+prepending "0x". If you don't know what this is, then you probably don't
+need it.
 
 ### Option: `server.table` _(optional)_
 
@@ -183,13 +186,11 @@ adds routes to the default table and enables special handling of default routes.
 
 ### Option: `server.pre_up` _(optional)_
 
-Allows you to run commands before WireGuard is started. This is useful
-for modifying things like routing.
+Allows you to run commands before WireGuard is started.
 
 ### Option: `server.pre_down` _(optional)_
 
-Allows you to run commands before WireGuard is stopped. This is useful
-for modifying things like routing.
+Allows you to run commands before WireGuard is stopped.
 
 ### Option: `server.post_up` _(optional)_
 
@@ -221,7 +222,7 @@ By default it executes the following:
 iptables -D FORWARD -o %i -j ACCEPT;
 iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE`
 
-### Option: `server.mtu`
+### Option: `server.mtu` _(optional)_
 
 The MTU is automatically determined from the endpoint addresses or the
 system default route, which is usually a sane choice.
@@ -258,7 +259,12 @@ generate client configurations, it can be helpful.
 If no private key and no public key is provided, the add-on will generate one
 for you and store it in: `/ssl/wireguard/<peer.name>/`.
 
-### Option: `peers.public_key` _(optional)_
+**Private keys, in general, should only be known by client, while this add-on
+supports setting or generating one for your client is helpful and easy, it
+isn't the best security practice. The best practice is to provide just the
+`peers.public_key` option below, the add-on will honor that.**
+
+### Option: `peers.public_key` _(optional, but recommended!)_
 
 Allows you to provide your own a base64 public key calculated by `wg pubkey`
 from a private key. This option supports the use of `!secret`.
@@ -266,6 +272,11 @@ from a private key. This option supports the use of `!secret`.
 If you don't supply one, the add-on will calculate one based on the private
 key that was supplied via the `peer.private_key` or, in case no private key
 was supplied, calculated it from the generated private key for this peer.
+
+**While this add-on can generate public/private keypairs, from best security
+practice perspective, it is strongly advised to manually provide a public key
+for each of your peers. In that case, the add-on will not generate or configure
+a private key by itself.**
 
 ### Option: `peers.allowed_ips` _(optional)_
 
@@ -307,10 +318,11 @@ For example, if the interface very rarely sends traffic, but it might at
 anytime receive traffic from a peer, and it is behind NAT, the interface might
 benefit from having a persistent keepalive interval of 25 seconds.
 
-If set to 0 or "off", this option is disabled.
+By default or when unspecified, this option is set to 25 seconds. This is
+different from the WireGuard default, since the use case for this add-on is
+most likely to be installed in home setups behind a NAT.
 
-By default or when unspecified, this option is off.
-Most users will not need this.
+If set to "off", this option is disabled.
 
 ### Option: `peers.endpoint` _(optional)_
 
@@ -332,8 +344,9 @@ public-key cryptography, for post-quantum resistance.
 **This configuration only valid for the peer end/client configuration and does
 not affect the server/add-on!**
 
-A 32-bit fwmark for outgoing packets.
-May be specified in hexadecimal by prepending "0x".
+A 32-bit fwmark for outgoing packets. May be specified in hexadecimal by
+prepending "0x". If you don't know what this is, then you probably don't
+need it.
 
 ### Option: `log_level` _(optional)_
 
@@ -363,7 +376,7 @@ add-on configuration. The add-on additionally generates an image for each
 client containing a QR code, to allow a quick an easy set up on, e.g., your
 mobile phone.
 
-## Running this add-on on a Generic/Debian/Ubuntu-based Hass.io
+## Using on a Generic Linux/Debian/Ubuntu-based Hass.io system
 
 The HassOS operating system for Hass.io by default has installed WireGuard
 support in its Linux kernel. However, if you run Hass.io on a generic Linux
@@ -437,7 +450,8 @@ sudo sysctl -p /etc/sysctl.conf
 
 The WireGuard add-on can be backed up using Hass.io snapshots. There is one
 caveat to take into account: A partial snapshot of the add-on DOES NOT contain
-the generated client configurations, including their public/private keys.
+the generated client configurations, including their public/private keys
+(if those keys are generated by the add-on).
 
 Client configurations are stored in the `/ssl/wireguard` folder. If you
 use partial snapshots, please be sure to backup both the `ssl` folder and the
