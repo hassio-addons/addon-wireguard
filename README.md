@@ -107,7 +107,7 @@ A little more extensive example add-on configuration:
         ],
         "allowed_ips": [],
         "client_allowed_ips": []
-      }
+      },
       {
         "name": "ninja",
         "public_key": "QNLXV8lrsPnKOd011DO8g5DWyad6iHJDSVOD6yOqjiE=",
