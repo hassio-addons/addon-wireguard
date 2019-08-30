@@ -198,8 +198,8 @@ Allows you to run commands after WireGuard has been started. This is useful
 for modifying things like routing. If not provided, the add-on will by default
 route all traffic coming in from the VPN through your home network.
 
-If you like to disable that, setting this option to `true` (yes, true), will
-disable that behavior.
+If you like to disable that, setting this option to `"off"`,
+will disable that behavior.
 
 By default it executes the following:
 
@@ -213,8 +213,8 @@ Allows you to run commands after WireGuard has been stopped. This is useful
 for modifying things like routing. If not provided, the add-on will by default
 remove the default rules created by the `post_up` defaults.
 
-If you like to disable that, setting this option to `true` (yes, true), will
-disable that behavior.
+If you like to disable that, setting this option to `"off"`,
+will disable that behavior.
 
 By default it executes the following:
 

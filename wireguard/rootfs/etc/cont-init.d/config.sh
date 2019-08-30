@@ -90,6 +90,14 @@ pre_down=$(bashio::config "server.pre_down")
 pre_up=$(bashio::config "server.pre_up")
 table=$(bashio::config "server.table")
 
+# Pre Up & Down handling
+if [[ "${pre_up}" = "off" ]]; then
+    pre_up=""
+fi
+if [[ "${pre_down}" = "off" ]]; then
+    pre_down=""
+fi
+
 # Post Up & Down defaults
 post_up="iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE"
 post_down="iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE"
@@ -112,11 +120,17 @@ fi
 # Load custom PostUp setting if provided
 if bashio::config.has_value 'server.post_up'; then
     post_up=$(bashio::config 'server.post_up')
+    if [[ "${post_up}" = "off" ]]; then
+        post_up=""
+    fi
 fi
 
 # Load custom PostDown setting if provided
 if bashio::config.has_value 'server.post_down'; then
     post_down=$(bashio::config 'server.post_down')
+    if [[ "${post_down}" = "off" ]]; then
+        post_down=""
+    fi
 fi
 
 # Finish up the main server configuration
