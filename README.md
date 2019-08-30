@@ -242,7 +242,7 @@ Names contain a hyphen (-) but must not start or end with one.
 
 ### Option: `peers.addresses`
 
-A list of IP (ipv4 or ipv6) addresses (optionally with CIDR masks) to be
+A list of IP (IPv4 or IPv6) addresses (optionally with CIDR masks) to be
 assigned to the peer.
 
 This is used in the client configuration, but also for used by the add-on to
@@ -283,7 +283,7 @@ a private key by itself.**
 **This configuration only valid for the add-on/server end and does not
 affect client configurations.!**
 
-A list of IPs (ipv4 or ipv6) addresses (optionally with CIDR masks) from which
+A list of IPs (IPv4 or IPv6) addresses (optionally with CIDR masks) from which
 incoming traffic for this peer is allowed and to which outgoing traffic for
 this peer is directed.
 
@@ -298,7 +298,7 @@ and `::/0` may be specified for matching all IPv6 addresses.
 **This configuration only valid for the peer end/client configuration and does
 not affect the server/add-on!**
 
-A list of IPs (ipv4 or ipv6) addresses (optionally with CIDR masks) from which
+A list of IPs (IPv4 or IPv6) addresses (optionally with CIDR masks) from which
 incoming traffic from the server is allowed and to which outgoing traffic for
 this peer is directed.
 
