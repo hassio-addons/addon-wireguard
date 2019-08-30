@@ -225,16 +225,20 @@ for peer in $(bashio::config 'peers|keys'); do
 
     # Determine allowed IPs for server side config, by default use
     # peer defined addresses.
-    allowed_ips="${addresses}"
+    list=()
     if bashio::config.has_value "peers[${peer}].allowed_ips"; then
         # Use allowed IP's defined by the user.
-        list=()
         for address in $(bashio::config "peers[${peer}].allowed_ips"); do
-            [[ "${address}" == *"/"* ]] || address="${address}/24"
+            [[ "${address}" == *"/"* ]] || address="${address}/32"
             list+=("${address}")
         done
-        allowed_ips=$(IFS=", "; echo "${list[*]}")
+    else
+        for address in $(bashio::config "peers[${peer}].addresses"); do
+            [[ "${address}" == *"/"* ]] || address="${address}/32"
+            list+=("${address}")
+        done
     fi
+    allowed_ips=$(IFS=", "; echo "${list[*]}")
 
     # Determine persistent keep alive
     keep_alive=25
