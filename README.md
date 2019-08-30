@@ -50,20 +50,20 @@ for you (if you want).
 Follow the following steps for installation & a quick start:
 
 1. [Add our Hass.io add-ons repository][repository] to your Hass.io instance.
-2. Install the "WireGuard" add-on.
-3. Set the `host` configuration option to your Hass.io (external) address,
+1. Install the "WireGuard" add-on.
+1. Set the `host` configuration option to your Hass.io (external) address,
     e.g., `myhome.duckdns.org`.
-4. Change the name of the peer to something useful, e.g., `myphone`.
-5. Save the configuration.
-6. Start the "WireGuard" add-on
-7. Check the logs of the "WireGuard" add-on to see if everything went well.
-8. Forward port `51820` (UDP!) in your router to your Hass.io IP.
-9. Download/Open the file `/ssl/wireguard/myphone/qrcode.png` stored on your
+1. Change the name of the peer to something useful, e.g., `myphone`.
+1. Save the configuration.
+1. Start the "WireGuard" add-on
+1. Check the logs of the "WireGuard" add-on to see if everything went well.
+1. Forward port `51820` (UDP!) in your router to your Hass.io IP.
+1. Download/Open the file `/ssl/wireguard/myphone/qrcode.png` stored on your
    Hass.io machine, e.g., using Samba, Visual Studio Code or the Configurator
    add-on.
-10. Install the WireGuard app on your phone.
-11. Add a new WireGuard connection to your phone, by scanning the QR code.
-12. Connect!
+1. Install the WireGuard app on your phone.
+1. Add a new WireGuard connection to your phone, by scanning the QR code.
+1. Connect!
 
 **NOTE**: Do not add this repository to Hass.io, please use:
 `https://github.com/hassio-addons/repository`.
