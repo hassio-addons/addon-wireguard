@@ -154,7 +154,7 @@ set, it will use the built-in DNS server from Hass.io.
 **If you are running the [AdGuard][adguard] or [Pi-hole][pihole] add-on,
 you can add  `172.30.32.1` as a DNS IP address the list.** This will cause your
 clients to use those. What this does, it effectively making your clients
-(e.g., your mobile phone) having ad-filtering, while not at home.
+to have ad-filtering (e.g., your mobile phone), while not at home.
 
 ### Option: `server.private_key` _(optional)_
 
