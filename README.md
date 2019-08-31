@@ -52,7 +52,7 @@ Follow the following steps for installation & a quick start:
 1. [Add our Hass.io add-ons repository][repository] to your Hass.io instance.
 1. Install the "WireGuard" add-on.
 1. Set the `host` configuration option to your Hass.io (external) address,
-    e.g., `myhome.duckdns.org`.
+    e.g., `myautomatedhome.duckdns.org`.
 1. Change the name of the peer to something useful, e.g., `myphone`.
 1. Save the configuration.
 1. Start the "WireGuard" add-on
@@ -90,7 +90,7 @@ A little more extensive example add-on configuration:
 {
   "log_level": "info",
   "server": {
-    "host": "myserver.duckdns.org",
+    "host": "myautomatedhome.duckdns.org",
     "addresses": [
       "10.10.10.1"
     ],
@@ -133,8 +133,8 @@ to your WireGuard add-on. The `host` is mainly used to generate client
 configurations and SHOULD NOT contain a port. If you want to change the port,
 use the "Network" section of the add-on configuration.
 
-Example: `myhome.duckdns.org`, for local testing `hassio.local` will actually
-work.
+Example: `myautomatedhome.duckdns.org`, for local testing `hassio.local`
+will actually work.
 
 ### Option: `server.addresses`
 
@@ -151,10 +151,10 @@ A list of DNS servers used by the add-on and the configuration generated for
 the clients. This configuration option is optional, and if no DNS servers are
 set, it will use the built-in DNS server from Hass.io.
 
-If you are running the [AdGuard][adguard] or [Pi-hole][pihole] add-on, you can
-add the internal IP address of your Hass.io system to the list. This will
-cause your clients to use those. What this does, it effectively making your
-client (e.g., your mobile phone) having ad-filtering, while not at home.
+**If you are running the [AdGuard][adguard] or [Pi-hole][pihole] add-on,
+you can add  `172.30.32.1` as a DNS IP address the list.** This will cause your
+clients to use those. What this does, it effectively making your clients
+(e.g., your mobile phone) having ad-filtering, while not at home.
 
 ### Option: `server.private_key` _(optional)_
 
@@ -477,6 +477,31 @@ sensor:
 At this moment, we do not have template or examples on how this could be
 used effectively with Home Assistant.
 If you have, sharing would be appreciated!
+
+## Troubleshooting
+
+- You can test if the tunnel works (when not using custom DNS servers), by
+  visiting <http://homeassistant:8123>. If a Home Assistant login page appears,
+  it is working!
+- Changes to peer/client configuration of this add-on, are not automatically
+  passed to your (already) configured clients. You have to change those
+  manually on your client device OR remove the WireGuard profile on the client
+  device and load the new client configuration (e.g., by scanning the QR
+  code).
+- If you are running the [AdGuard][adguard] or [Pi-hole][pihole] add-on,
+  you can add  `172.30.32.1` as a DNS IP address the list to use it.
+- If you run a protection service like CloudFlare on your `server.host`
+  address, please remember, that WireGuard will try to connect to CloudFlare
+  in that case (and not your Home). Please consider using your IP
+  address in the `server.host` field, or get an addition DNS record (e.g.,
+  using DuckDNS) that does point directly to your IP address.
+- If the initial connection from you client fails, this can be caused by
+  resolving issues of `server.host` on the client device. You can consider
+  solving this by editing the "Endpoint" setting on the client on the device
+  in the connection profile.
+- We had reports of people with connection issues on the client side, being
+  resolved by configuring/setting the "Listen port" to `51820` on the client
+  device in the connection profile.
 
 ## Changelog & Releases
 

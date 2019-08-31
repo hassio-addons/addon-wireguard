@@ -35,7 +35,7 @@
   ],
   "options": {
     "server": {
-      "host": "hassio.local",
+      "host": "myautomatedhome.duckdns.org",
       "addresses": [
         "172.244.66.1"
       ],
