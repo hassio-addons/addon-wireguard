@@ -467,14 +467,32 @@ With the use of the [Home Assistant RESTful][ha-rest] integration, one should
 be able to grab some interesting data from this add-on.
 
 Example:
-
+Set the port in the add-on settings; for example: 6789 and your IP of your Home Assistant instance; the hassio.local didn't work for me.
+Add a rest sensor:
 ```yaml
-sensor:
-  - platform: rest
-    resource: http://a0d7b954-wireguard
+platform: rest
+name: wireguard_sensor
+resource: http://192.168.3.72:6789/
+value_template: 'TEST'
+json_attributes:
+  - ipad
+  - mac
+  - telefoon
 ```
+The value_template: 'TEST' is for having a state; if you don't do this you will reach the 255 characters state limit.
+For each peers add a json_attributes entry.
+For each peer you will get a attribute such as: 
+```json { "endpoint": "172.30.32.1:47004", "latest_handshake": 0, "transfer_rx": 48699004, "transfer_tx": 625289972 }```
 
-At this moment, we do not have template or examples on how this could be
+Having bytes isn't so useful; that's why we can change it with filesizeformat and a template:
+platform: template
+sensors:
+  ipad_sent:
+  value_template: '{{ states.sensor.wireguard_sensor.attributes["ipad"]["transfer_tx"] |filesizeformat}}'
+Check the end result:
+![Example picture](https://i.imgur.com/tRINGjC.png)
+
+At this moment, we have only a few templates or examples on how this could be
 used effectively with Home Assistant.
 If you have, sharing would be appreciated!
 
