@@ -31,7 +31,7 @@ declare table
 
 if ! bashio::fs.directory_exists '/ssl/wireguard'; then
     mkdir -p /ssl/wireguard ||
-        bashio::exit.nok "Could create wireguard storage folder!"
+        bashio::exit.nok "Could not create wireguard storage folder!"
 fi
 
 # Get interface and config file location
