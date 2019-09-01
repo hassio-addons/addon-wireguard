@@ -52,7 +52,7 @@ Follow the following steps for installation & a quick start:
 1. [Add our Hass.io add-ons repository][repository] to your Hass.io instance.
 1. Install the "WireGuard" add-on.
 1. Set the `host` configuration option to your Hass.io (external) address,
-    e.g., `myautomatedhome.duckdns.org`.
+   e.g., `myautomatedhome.duckdns.org`.
 1. Change the name of the peer to something useful, e.g., `myphone`.
 1. Save the configuration.
 1. Start the "WireGuard" add-on
@@ -152,7 +152,7 @@ the clients. This configuration option is optional, and if no DNS servers are
 set, it will use the built-in DNS server from Hass.io.
 
 **If you are running the [AdGuard][adguard] or [Pi-hole][pihole] add-on,
-you can add  `172.30.32.1` as a DNS IP address in the list.** This will cause your
+you can add `172.30.32.1` as a DNS IP address in the list.** This will cause your
 clients to use those. What this does, it effectively making your clients
 to have ad-filtering (e.g., your mobile phone), while not at home.
 
@@ -281,7 +281,7 @@ a private key by itself.**
 ### Option: `peers.allowed_ips` _(optional)_
 
 **This configuration only valid for the add-on/server end and does not
-affect client configurations.!**
+affect client configurations!**
 
 A list of IPs (IPv4 or IPv6) addresses (optionally with CIDR masks) from which
 incoming traffic for this peer is allowed and to which outgoing traffic for
@@ -358,7 +358,7 @@ dealing with an unknown issue. Possible values are:
 - `debug`: Shows detailed debug information.
 - `info`: Normal (usually) interesting events.
 - `warning`: Exceptional occurrences that are not errors.
-- `error`:  Runtime errors that do not require immediate action.
+- `error`: Runtime errors that do not require immediate action.
 - `fatal`: Something went terribly wrong. Add-on becomes unusable.
 
 Please note that each level automatically includes log messages from a
@@ -489,7 +489,7 @@ If you have, sharing would be appreciated!
   device and load the new client configuration (e.g., by scanning the QR
   code).
 - If you are running the [AdGuard][adguard] or [Pi-hole][pihole] add-on,
-  you can add  `172.30.32.1` as a DNS IP address the list to use it.
+  you can add `172.30.32.1` as a DNS IP address the list to use it.
 - If you run a protection service like CloudFlare on your `server.host`
   address, please remember, that WireGuard will try to connect to CloudFlare
   in that case (and not your Home). Please consider using your IP
