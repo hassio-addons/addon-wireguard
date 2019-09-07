@@ -136,6 +136,9 @@ use the "Network" section of the add-on configuration.
 Example: `myautomatedhome.duckdns.org`, for local testing `hassio.local`
 will actually work.
 
+DO NOT attempt to use a URL such as a Nabu Casa endpoint, the entry needs to be
+either a DNS entry or IP address that is accessible by the clients.
+
 ### Option: `server.addresses`
 
 A list of IP (IPv4 or IPv6) addresses (optionally with CIDR masks) to be
