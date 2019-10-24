@@ -85,7 +85,7 @@ else
 fi
 
 fwmark=$(bashio::config "server.fwmark")
-mtu=$(bashio::config "mtu")
+mtu=$(bashio::config "server.mtu")
 pre_down=$(bashio::config "server.pre_down")
 pre_up=$(bashio::config "server.pre_up")
 table=$(bashio::config "server.table")
