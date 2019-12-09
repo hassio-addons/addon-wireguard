@@ -445,7 +445,7 @@ system (e.g., Ubuntu, Debian).
 
 ```bash
 sudo sysctl -w net.ipv4.ip_forward=1
-sudo echo "net.ipv4.ip_forward = 1" > /etc/sysctl.conf
+echo "net.ipv4.ip_forward = 1" | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p /etc/sysctl.conf
 ```
 
