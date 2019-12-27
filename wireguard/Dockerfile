@@ -10,7 +10,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN \
     apk add --no-cache --virtual .build-dependencies \
         build-base=0.5-r1 \
-        git=2.22.0-r0 \
+        git=2.22.2-r0 \
     \
     && apk add --no-cache \
         go@edge=1.12.8-r0 \
