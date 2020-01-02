@@ -49,8 +49,7 @@ for you (if you want).
 
 Follow the following steps for installation & a quick start:
 
-1. [Add our Hass.io add-ons repository][repository] to your Hass.io instance.
-1. Install the "WireGuard" add-on.
+1. Search for the "WireGuard" add-on in the Hass.io add-on store and install it.
 1. Set the `host` configuration option to your Hass.io (external) address,
    e.g., `myautomatedhome.duckdns.org`.
 1. Change the name of the peer to something useful, e.g., `myphone`.
@@ -64,9 +63,6 @@ Follow the following steps for installation & a quick start:
 1. Install the WireGuard app on your phone.
 1. Add a new WireGuard connection to your phone, by scanning the QR code.
 1. Connect!
-
-**NOTE**: Do not add this repository to Hass.io, please use:
-`https://github.com/hassio-addons/repository`.
 
 ## Configuration
 
