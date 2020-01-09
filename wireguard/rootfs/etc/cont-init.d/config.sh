@@ -175,12 +175,13 @@ fi
 # Fetch all the peers
 for peer in $(bashio::config 'peers|keys'); do
 
+    name=$(bashio::config "peers[${peer}].name")
+    
     # Check if at least 1 address is specified
     if ! bashio::config.has_value "peers[${peer}].addresses"; then
         bashio::exit.nok "You need at least 1 address configured for ${name}"
     fi
 
-    name=$(bashio::config "peers[${peer}].name")
     config_dir="/ssl/wireguard/${name}"
     endpoint=$(bashio::config "peers[${peer}].endpoint")
     fwmark=$(bashio::config "peers[${peer}].fwmark")
