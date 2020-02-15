@@ -36,13 +36,13 @@
     ]
   },
   "schema": {
-    "log_level": "match(^(trace|debug|info|notice|warning|error|fatal)$)?",
+    "log_level": "list(trace|debug|info|notice|warning|error|fatal)?",
     "server": {
       "host": "str",
       "interface": "match(^wg([0-9])+$)?",
       "addresses": ["str"],
       "dns": ["str"],
-      "private_key": "str?",
+      "private_key": "password?",
       "public_key": "str?",
       "fwmark": "str?",
       "table": "str?",
