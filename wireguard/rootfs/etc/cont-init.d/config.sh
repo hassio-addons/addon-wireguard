@@ -1,6 +1,6 @@
 #!/usr/bin/with-contenv bashio
 # ==============================================================================
-# Community Hass.io Add-ons: WireGuard
+# Home Assistant Community Add-on: WireGuard
 # Creates the interface configuration
 # ==============================================================================
 declare -a list
@@ -176,7 +176,7 @@ fi
 for peer in $(bashio::config 'peers|keys'); do
 
     name=$(bashio::config "peers[${peer}].name")
-    
+
     # Check if at least 1 address is specified
     if ! bashio::config.has_value "peers[${peer}].addresses"; then
         bashio::exit.nok "You need at least 1 address configured for ${name}"
