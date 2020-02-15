@@ -82,42 +82,29 @@ peers (clients).
 
 A little more extensive example add-on configuration:
 
-```json
-{
-  "log_level": "info",
-  "server": {
-    "host": "myautomatedhome.duckdns.org",
-    "addresses": [
-      "10.10.10.1"
-    ],
-    "dns": [
-      "1.1.1.1",
-      "1.0.0.1"
-    ]
-  },
-  "peers": [
-      {
-        "name": "frenck",
-        "addresses": [
-          "10.10.10.2"
-        ],
-        "allowed_ips": [],
-        "client_allowed_ips": []
-      },
-      {
-        "name": "ninja",
-        "public_key": "QNLXV8lrsPnKOd011DO8g5DWyad6iHJDSVOD6yOqjiE=",
-        "addresses": [
-          "10.10.10.3"
-        ],
-        "allowed_ips": [],
-        "client_allowed_ips": [
-          "10.10.10.0/24",
-          "192.168.1.0/24"
-        ]
-      }
-  ]
-}
+```yaml
+log_level: info
+server:
+  host: myautomatedhome.duckdns.org
+  addresses:
+    - 10.10.10.1
+  dns:
+    - 1.1.1.1
+    - 1.0.0.1
+peers:
+- name: frenck
+  addresses:
+    - 10.10.10.2
+  allowed_ips: []
+  client_allowed_ips: []
+- name: ninja
+  public_key: QNLXV8lrsPnKOd011DO8g5DWyad6iHJDSVOD6yOqjiE=
+  addresses:
+    - 10.10.10.3
+  allowed_ips: []
+  client_allowed_ips:
+    - 10.10.10.0/24
+    - 192.168.1.0/24
 ```
 
 **Note**: _This is just an example, don't copy and paste it! Create your own!_
