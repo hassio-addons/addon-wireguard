@@ -468,7 +468,7 @@ If you have, sharing would be appreciated!
 ## Troubleshooting
 
 - You can test if the tunnel works (when not using custom DNS servers), by
-  visiting <http://homeassistant:8123>. If a Home Assistant login page appears,
+  visiting <http://homeassistant.local:8123>. If a Home Assistant login page appears,
   it is working!
 - Changes to peer/client configuration of this add-on, are not automatically
   passed to your (already) configured clients. You have to change those
