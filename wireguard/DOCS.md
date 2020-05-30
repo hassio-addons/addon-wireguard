@@ -450,12 +450,8 @@ If you have, sharing would be appreciated!
   manually on your client device OR remove the WireGuard profile on the client
   device and load the new client configuration (e.g., by scanning the QR
   code).
-- If you are running the [AdGuard][adguard] or [Pi-hole][pihole] add-on,
+- If you are running the [AdGuard][adguard] add-on,
   you can add `172.30.32.1` as a DNS IP address the list to use it.
-- If you are running the [Pi-hole][pihole] add-on and facing DNS issues when
-  connected through WireGuard, make sure the option `Listen on all interfaces`
-  is selected in Pi-hole. This option is located under `Settings` > `DNS` >
-  `Interface listening behavior`.
 - If you run a protection service like CloudFlare on your `server.host`
   address, please remember, that WireGuard will try to connect to CloudFlare
   in that case (and not your Home). Please consider using your IP
