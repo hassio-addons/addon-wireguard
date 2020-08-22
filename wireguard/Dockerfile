@@ -16,7 +16,7 @@ RUN \
         go@edge=1.13.14-r0 \
         libqrencode=4.0.2-r0 \
         openresolv=3.10.0-r0 \
-        wireguard-tools@edge=1.0.20200102-r0 \
+        wireguard-tools@edge=1.0.20200510-r0 \
     \
     && git clone --branch "v0.0.20200320" --depth=1 \
         "https://git.zx2c4.com/wireguard-go" /tmp/wireguard \
