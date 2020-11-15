@@ -13,7 +13,7 @@ RUN \
         git=2.26.2-r0 \
     \
     && apk add --no-cache \
-        go=1.13.14-r0 \
+        go=1.13.15-r0 \
         libqrencode=4.0.2-r0 \
         openresolv=3.10.0-r0 \
         wireguard-tools=1.0.20200510-r0 \
