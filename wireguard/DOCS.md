@@ -165,7 +165,11 @@ will disable that behavior.
 
 By default it executes the following:
 
-`iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE`
+```bash
+iptables -A FORWARD -i %i -j ACCEPT
+iptables -A FORWARD -o %i -j ACCEPT
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+```
 
 ### Option: `server.post_down` _(optional)_
 
@@ -178,7 +182,11 @@ will disable that behavior.
 
 By default it executes the following:
 
-`iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE`
+```bash
+iptables -D FORWARD -i %i -j ACCEPT
+iptables -D FORWARD -o %i -j ACCEPT
+iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
+```
 
 ### Option: `server.mtu` _(optional)_
 
