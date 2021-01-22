@@ -10,7 +10,7 @@
 ![Supports amd64 Architecture][amd64-shield]
 ![Supports i386 Architecture][i386-shield]
 
-[![GitLab CI][gitlabci-shield]][gitlabci]
+[![Github Actions][github-actions-shield]][github-actions]
 ![Project Maintenance][maintenance-shield]
 [![GitHub Activity][commits-shield]][commits]
 
@@ -111,19 +111,19 @@ SOFTWARE.
 [armhf-shield]: https://img.shields.io/badge/armhf-yes-green.svg
 [armv7-shield]: https://img.shields.io/badge/armv7-yes-green.svg
 [commits-shield]: https://img.shields.io/github/commit-activity/y/hassio-addons/addon-wireguard.svg
-[commits]: https://github.com/hassio-addons/addon-wireguard/commits/master
+[commits]: https://github.com/hassio-addons/addon-wireguard/commits/main
 [contributors]: https://github.com/hassio-addons/addon-wireguard/graphs/contributors
 [discord-ha]: https://discord.gg/c5DvZ4e
 [discord-shield]: https://img.shields.io/discord/478094546522079232.svg
 [discord]: https://discord.me/hassioaddons
-[docs]: https://github.com/hassio-addons/addon-wireguard/blob/master/wireguard/DOCS.md
+[docs]: https://github.com/hassio-addons/addon-wireguard/blob/main/wireguard/DOCS.md
 [forum-shield]: https://img.shields.io/badge/community-forum-brightgreen.svg
 [forum]: https://community.home-assistant.io/t/home-assistant-community-add-on-wireguard/134662?u=frenck
 [frenck]: https://github.com/frenck
+[github-actions-shield]: https://github.com/hassio-addons/addon-wireguard/workflows/CI/badge.svg
+[github-actions]: https://github.com/hassio-addons/addon-wireguard/actions
 [github-sponsors-shield]: https://frenck.dev/wp-content/uploads/2019/12/github_sponsor.png
 [github-sponsors]: https://github.com/sponsors/frenck
-[gitlabci-shield]: https://gitlab.com/hassio-addons/addon-wireguard/badges/master/pipeline.svg
-[gitlabci]: https://gitlab.com/hassio-addons/addon-wireguard/pipelines
 [i386-shield]: https://img.shields.io/badge/i386-yes-green.svg
 [issue]: https://github.com/hassio-addons/addon-wireguard/issues
 [license-shield]: https://img.shields.io/github/license/hassio-addons/addon-wireguard.svg
