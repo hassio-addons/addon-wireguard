@@ -464,8 +464,7 @@ If you have, sharing would be appreciated!
 ## Changelog & Releases
 
 This repository keeps a change log using [GitHub's releases][releases]
-functionality. The format of the log is based on
-[Keep a Changelog][keepchangelog].
+functionality.
 
 Releases are based on [Semantic Versioning][semver], and use the format
 of `MAJOR.MINOR.PATCH`. In a nutshell, the version will be incremented
@@ -529,7 +528,6 @@ SOFTWARE.
 [frenck]: https://github.com/frenck
 [ha-rest]: https://www.home-assistant.io/components/rest/
 [issue]: https://github.com/hassio-addons/addon-wireguard/issues
-[keepchangelog]: http://keepachangelog.com/en/1.0.0/
 [reddit]: https://reddit.com/r/homeassistant
 [releases]: https://github.com/hassio-addons/addon-wireguard/releases
 [semver]: http://semver.org/spec/v2.0.0.htm
