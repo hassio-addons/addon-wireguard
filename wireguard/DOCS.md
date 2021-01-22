@@ -68,19 +68,19 @@ server:
     - 1.1.1.1
     - 1.0.0.1
 peers:
-- name: frenck
-  addresses:
-    - 10.10.10.2
-  allowed_ips: []
-  client_allowed_ips: []
-- name: ninja
-  public_key: QNLXV8lrsPnKOd011DO8g5DWyad6iHJDSVOD6yOqjiE=
-  addresses:
-    - 10.10.10.3
-  allowed_ips: []
-  client_allowed_ips:
-    - 10.10.10.0/24
-    - 192.168.1.0/24
+  - name: frenck
+    addresses:
+      - 10.10.10.2
+    allowed_ips: []
+    client_allowed_ips: []
+  - name: ninja
+    public_key: QNLXV8lrsPnKOd011DO8g5DWyad6iHJDSVOD6yOqjiE=
+    addresses:
+      - 10.10.10.3
+    allowed_ips: []
+    client_allowed_ips:
+      - 10.10.10.0/24
+      - 192.168.1.0/24
 ```
 
 **Note**: _This is just an example, don't copy and paste it! Create your own!_
@@ -165,9 +165,7 @@ will disable that behavior.
 
 By default it executes the following:
 
-`iptables -A FORWARD -i %i -j ACCEPT;
-iptables -A FORWARD -o %i -j ACCEPT;
-iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE`
+`iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE`
 
 ### Option: `server.post_down` _(optional)_
 
@@ -180,9 +178,7 @@ will disable that behavior.
 
 By default it executes the following:
 
-`iptables -D FORWARD -i %i -j ACCEPT;
-iptables -D FORWARD -o %i -j ACCEPT;
-iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE`
+`iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE`
 
 ### Option: `server.mtu` _(optional)_
 
@@ -472,12 +468,12 @@ functionality. The format of the log is based on
 [Keep a Changelog][keepchangelog].
 
 Releases are based on [Semantic Versioning][semver], and use the format
-of ``MAJOR.MINOR.PATCH``. In a nutshell, the version will be incremented
+of `MAJOR.MINOR.PATCH`. In a nutshell, the version will be incremented
 based on the following:
 
-- ``MAJOR``: Incompatible or major changes.
-- ``MINOR``: Backwards-compatible new features and enhancements.
-- ``PATCH``: Backwards-compatible bugfixes and package updates.
+- `MAJOR`: Incompatible or major changes.
+- `MINOR`: Backwards-compatible new features and enhancements.
+- `PATCH`: Backwards-compatible bugfixes and package updates.
 
 ## Support
 
