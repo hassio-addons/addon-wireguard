@@ -1,4 +1,4 @@
-ARG BUILD_FROM=hassioaddons/base:8.0.5
+ARG BUILD_FROM=ghcr.io/hassio-addons/base/amd64:9.1.2
 # hadolint ignore=DL3006
 FROM ${BUILD_FROM}
 
@@ -10,15 +10,15 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN \
     apk add --no-cache --virtual .build-dependencies \
         build-base=0.5-r2 \
-        git=2.26.2-r0 \
+        git=2.30.0-r0 \
     \
     && apk add --no-cache \
-        go=1.13.15-r0 \
-        libqrencode=4.0.2-r0 \
-        openresolv=3.10.0-r0 \
-        wireguard-tools=1.0.20200510-r0 \
+        go=1.15.7-r0 \
+        libqrencode=4.1.1-r0 \
+        openresolv=3.12.0-r0 \
+        wireguard-tools=1.0.20200827-r1 \
     \
-    && git clone --branch "v0.0.20200320" --depth=1 \
+    && git clone --branch "0.0.20200320" --depth=1 \
         "https://git.zx2c4.com/wireguard-go" /tmp/wireguard \
     \
     && cd /tmp/wireguard \
