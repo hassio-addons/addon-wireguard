@@ -18,7 +18,7 @@ RUN \
         openresolv=3.12.0-r0 \
         wireguard-tools=1.0.20200827-r1 \
     \
-    && git clone --branch "0.0.20200320" --depth=1 \
+    && git clone --branch "0.0.20201118" --depth=1 \
         "https://git.zx2c4.com/wireguard-go" /tmp/wireguard \
     \
     && cd /tmp/wireguard \
