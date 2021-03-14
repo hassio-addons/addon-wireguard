@@ -113,14 +113,14 @@ A list of DNS servers used by the add-on and the configuration generated for
 the clients. This configuration option is optional, and if no DNS servers are
 set, it will use the built-in DNS server from Hass.io.
 
-**If you are running the [AdGuard][adguard] add-on, you can add the LAN address
-of HomeAssistant as a DNS IP address in the list.** This will cause your clients
-to use those. What this does, it effectively making your clients to have
+**If you are running the [AdGuard][adguard] add-on, you can add the LAN
+address of HomeAssistant as a DNS IP address in the list.** This will cause
+your clients to use those. What this does, it effectively gives your clients
 ad-filtering (e.g., your mobile phone), while not at home.
 
-*Note: This used to recommend adding `172.30.32.1` as the IP address for Adguard.
-Starting in v4.0.0 of that add-on that won't work anymore, you'll need to use
-the LAN address. You will also need to update any previously configured clients.
+*Note: This used to recommend adding `172.30.32.1` as the DNS IP Address.
+Starting in v4.0.0 of the Adguard add-on you'll need to use the LAN
+address. You will also need to update any previously configured clients.
 
 ### Option: `server.private_key` _(optional)_
 
