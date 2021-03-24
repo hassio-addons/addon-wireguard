@@ -114,7 +114,7 @@ the clients. This configuration option is optional, and if no DNS servers are
 set, it will use the built-in DNS server from Hass.io.
 
 **If you are running the [AdGuard][adguard] add-on,
-you can add `172.30.32.1` as a DNS IP address in the list.** This will cause your
+you can add the LAN IP of your Home Assistant instance as a DNS IP address in the list.** This will cause your
 clients to use those. What this does, it effectively making your clients
 to have ad-filtering (e.g., your mobile phone), while not at home.
 
