@@ -466,8 +466,8 @@ If you have, sharing would be appreciated!
   solving this by editing the "Endpoint" setting on the client on the device
   in the connection profile.
 - We had reports of people with connection issues on the client side, being
-  resolved by configuring/setting the "Listen port" to `51820` on the client
-  device in the connection profile.
+  resolved by configuring/setting the `ListenPort = 51820` on the client
+  device in the connection profile (in `[Interface]` section).
 
 ## Changelog & Releases
 
