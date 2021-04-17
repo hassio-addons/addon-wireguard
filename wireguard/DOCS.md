@@ -204,7 +204,7 @@ This is an identifier for you. It helps you to know what this peer is, e.g.,
 This name is also used for creating the directory in `/ssl/wireguard` where
 the generated client configuration and QR codes are stored. Therefore, a name
 has a maximum of 32 characters, can only contain A-Z (or a-z) and 0-9.
-Names contain a hyphen (-) but must not start or end with one.
+Names may contain a hyphen (-) but must not start or end with one.
 
 ### Option: `peers.addresses`
 
