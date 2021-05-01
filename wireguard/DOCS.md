@@ -114,7 +114,7 @@ the clients. This configuration option is optional, and if no DNS servers are
 set, it will use the built-in DNS server from Hass.io.
 
 **If you are running the [AdGuard][adguard] add-on, you can add the LAN
-address of HomeAssistant as a DNS IP address in the list.** This will cause
+address of Home Assistant as a DNS IP address in the list.** This will cause
 your clients to use those. What this does, it effectively gives your clients
 ad-filtering (e.g., your mobile phone), while not at home.
 
@@ -459,7 +459,10 @@ If you have, sharing would be appreciated!
   device and load the new client configuration (e.g., by scanning the QR
   code).
 - If you are running the [AdGuard][adguard] add-on,
-  you can add `172.30.32.1` as a DNS IP address the list to use it.
+  you can add the LAN address of Home Assistant to use it as a DNS IP
+  address to use it. Note that listing `172.30.32.1` here no longer works
+  as of v4.0.0 of the Adguard add-on. So if your previous configuration
+  is no longer working this may be why.
 - If you run a protection service like CloudFlare on your `server.host`
   address, please remember, that WireGuard will try to connect to CloudFlare
   in that case (and not your Home). Please consider using your IP
