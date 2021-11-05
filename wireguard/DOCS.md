@@ -46,7 +46,7 @@ Now, for starters, don't get scared by the number of options and difficult
 terms this add-on provides. WireGuard can be a complex piece of software,
 but the add-on only has a few, simple, required settings. All the rest is
 handled by the add-on. However, If you would like to set up a more complex
-configuration, the add-on would allow that to.
+configuration, the add-on would allow that, too.
 
 If you are familiar with WireGuard, please note the following:
 The configuration of WireGuard looks very similar to all terms used in the
