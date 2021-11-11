@@ -1,18 +1,17 @@
 ---
-name: CI
+name: PR Labels
 
 # yamllint disable-line rule:truthy
 on:
-  push:
-  pull_request:
+  pull_request_target:
     types:
       - opened
-      - reopened
+      - labeled
+      - unlabeled
       - synchronize
-  workflow_dispatch:
 
 jobs:
   workflows:
-    uses: hassio-addons/workflows/.github/workflows/addon-ci.yaml@main
+    uses: hassio-addons/workflows/.github/workflows/pr-labels.yaml@main
     secrets:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
