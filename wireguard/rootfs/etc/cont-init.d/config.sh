@@ -285,6 +285,8 @@ for peer in $(bashio::config 'peers|keys'); do
         echo "Endpoint = ${host}:${port}"
         echo "AllowedIPs = ${allowed_ips}"
         echo "PersistentKeepalive = ${keep_alive}"
+        bashio::config.has_value "peers[${peer}].pre_shared_key" \
+            && echo "PreSharedKey = ${pre_shared_key}"
         echo ""
     } > "${config_dir}/client.conf"
 
