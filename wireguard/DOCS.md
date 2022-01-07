@@ -35,7 +35,7 @@ Follow the following steps for installation & a quick start:
 1. Forward port `51820` (UDP!) in your router to your Hass.io IP.
 1. Download/Open the file `/ssl/wireguard/myphone/qrcode.png` stored on your
    Hass.io machine, e.g., using Samba, Visual Studio Code or the Configurator
-   add-on.
+   add-on. You can also find the QR Code in the add-on logs.
 1. Install the WireGuard app on your phone.
 1. Add a new WireGuard connection to your phone, by scanning the QR code.
 1. Connect!

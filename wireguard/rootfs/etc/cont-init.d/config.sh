@@ -291,6 +291,10 @@ for peer in $(bashio::config 'peers|keys'); do
     # Generate QR code with client configuration
     qrencode -t PNG -o "${config_dir}/qrcode.png" < "${config_dir}/client.conf"
 
+    # Show QR code with client configuration in logs
+    bashio::log.info "QR code for peer ${name}:"
+    qrencode -t ANSI < "${config_dir}/client.conf"
+
     # Store client name for the status API based on public key
     filename=$(sha1sum <<< "${peer_public_key}" | awk '{ print $1 }')
     echo -n "${name}" > "/var/lib/wireguard/${filename}"
