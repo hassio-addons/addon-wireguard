@@ -24,15 +24,19 @@ for you (if you want).
 
 Follow the following steps for installation & a quick start:
 
-1. Search for the "WireGuard" add-on in the Supervisor add-on store
-   and install it.
-1. Set the `host` configuration option to your Hass.io (external) address,
-   e.g., `myautomatedhome.duckdns.org`.
+1. Click the Home Assistant My button below to open the add-on on your Home
+   Assistant instance.
+
+   [![Open this add-on in your Home Assistant instance.][addon-badge]][addon]
+
+1. Click the "Install" button to install the add-on.
+1. Set the `host` configuration option to your Home Assistant (external)
+   address, e.g., `myautomatedhome.duckdns.org`.
 1. Change the name of the peer to something useful, e.g., `myphone`.
 1. Save the configuration.
 1. Start the "WireGuard" add-on
 1. Check the logs of the "WireGuard" add-on to see if everything went well.
-1. Forward port `51820` (UDP!) in your router to your Hass.io IP.
+1. Forward port `51820` (UDP!) in your router to your Home Assistant instance.
 1. Download/Open the file `/ssl/wireguard/myphone/qrcode.png` stored on your
    Home Assistant instance, e.g., using Samba, Visual Studio Code or the
    Configurator add-on.
@@ -92,7 +96,7 @@ to your WireGuard add-on. The `host` is mainly used to generate client
 configurations and SHOULD NOT contain a port. If you want to change the port,
 use the "Network" section of the add-on configuration.
 
-Example: `myautomatedhome.duckdns.org`, for local testing `hassio.local`
+Example: `myautomatedhome.duckdns.org`, for local testing `homeassistant.local`
 will actually work.
 
 DO NOT attempt to use a URL such as a Nabu Casa endpoint, the entry needs to be
@@ -528,6 +532,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
+[addon-badge]: https://my.home-assistant.io/badges/supervisor_addon.svg
+[addon]: https://my.home-assistant.io/redirect/supervisor_addon/?addon=a0d7b954_wireguard&repository_url=https%3A%2F%2Fgithub.com%2Fhassio-addons%2Frepository
 [adguard]: https://github.com/hassio-addons/addon-adguard-home
 [contributors]: https://github.com/hassio-addons/addon-wireguard/graphs/contributors
 [discord-ha]: https://discord.gg/c5DvZ4e
