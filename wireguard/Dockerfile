@@ -19,6 +19,8 @@ RUN \
         openresolv=3.12.0-r0 \
         wireguard-tools=1.0.20210914-r0 \
     \
+    && ln -sf /sbin/xtables-nft-multi /sbin/ip6tables \
+    && ln -sf /sbin/xtables-nft-multi /sbin/iptables \
     && git clone --branch "0.0.20220316" --depth=1 \
         "https://git.zx2c4.com/wireguard-go" /tmp/wireguard \
     \
