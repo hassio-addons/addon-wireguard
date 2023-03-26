@@ -21,7 +21,7 @@ RUN \
     \
     && ln -sf /sbin/xtables-nft-multi /sbin/ip6tables \
     && ln -sf /sbin/xtables-nft-multi /sbin/iptables \
-    && git clone --branch "0.0.20220316" --depth=1 \
+    && git clone --branch "0.0.20230223" --depth=1 \
         "https://git.zx2c4.com/wireguard-go" /tmp/wireguard \
     \
     && cd /tmp/wireguard \
