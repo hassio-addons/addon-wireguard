@@ -14,7 +14,7 @@ RUN \
     \
     && apk add --no-cache \
         go=1.18.7-r0 \
-        iptables=1.8.8-r1 \
+        iptables=1.8.8-r2 \
         libqrencode=4.1.1-r0 \
         openresolv=3.12.0-r0 \
         wireguard-tools=1.0.20210914-r0 \
