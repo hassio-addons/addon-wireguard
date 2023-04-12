@@ -13,7 +13,7 @@ RUN \
         git=2.38.4-r1 \
     \
     && apk add --no-cache \
-        go=1.19.7-r0 \
+        go=1.19.8-r0 \
         iptables=1.8.8-r2 \
         libqrencode=4.1.1-r1 \
         openresolv=3.12.0-r1 \
