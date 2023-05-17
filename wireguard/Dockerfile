@@ -1,4 +1,4 @@
-ARG BUILD_FROM=ghcr.io/hassio-addons/base:13.2.2
+ARG BUILD_FROM=ghcr.io/hassio-addons/base:14.0.0
 # hadolint ignore=DL3006
 FROM ${BUILD_FROM}
 
@@ -10,14 +10,14 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN \
     apk add --no-cache --virtual .build-dependencies \
         build-base=0.5-r3 \
-        git=2.38.5-r0 \
+        git=2.40.1-r0 \
     \
     && apk add --no-cache \
-        go=1.19.9-r0 \
-        iptables=1.8.8-r2 \
+        go=1.20.4-r0 \
+        iptables=1.8.9-r2 \
         libqrencode=4.1.1-r1 \
-        openresolv=3.12.0-r1 \
-        wireguard-tools=1.0.20210914-r1 \
+        openresolv=3.13.1-r0 \
+        wireguard-tools=1.0.20210914-r3 \
     \
     && ln -sf /sbin/xtables-nft-multi /sbin/ip6tables \
     && ln -sf /sbin/xtables-nft-multi /sbin/iptables \
