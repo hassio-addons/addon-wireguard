@@ -133,12 +133,14 @@ if bashio::config.has_value 'server.post_down'; then
     fi
 fi
 
+port=$(bashio::addon.port "51820")
+
 # Finish up the main server configuration
 {
     echo "PrivateKey = ${server_private_key}"
 
     # Adds server port to the configuration
-    echo "ListenPort = 51820"
+    echo "ListenPort = ${port}"
 
     # Custom routing table
     bashio::config.has_value "server.table" && echo "Table = ${table}"
@@ -186,7 +188,6 @@ for peer in $(bashio::config 'peers|keys'); do
     endpoint=$(bashio::config "peers[${peer}].endpoint")
     fwmark=$(bashio::config "peers[${peer}].fwmark")
     host=$(bashio::config 'server.host')
-    port=$(bashio::addon.port "51820/udp")
     pre_shared_key=$(bashio::config "peers[${peer}].pre_shared_key")
 
     # Create directory for storing client configuration
