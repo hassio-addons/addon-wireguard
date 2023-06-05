@@ -47,6 +47,6 @@ while true; do
         json=$(bashio::var.json "${peers[@]}")
     fi
 
-    echo -e "HTTP/1.1 200 OK\r\nContent-type: application/json\r\n\r\n${json}" \
+    echo -e "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n${json}" \
         | nc -l -p 80 > /dev/null
 done
