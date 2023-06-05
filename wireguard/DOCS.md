@@ -216,7 +216,7 @@ A list of IP (IPv4 or IPv6) addresses (optionally with CIDR masks) to be
 assigned to the peer.
 
 This is used in the client configuration, but also for used by the add-on to
-set the allowed IPs (unless overriden by the `peers.allowed_ips` option.)
+set the allowed IPs (unless overridden by the `peers.allowed_ips` option.)
 
 ### Option: `peers.private_key` _(optional)_
 
