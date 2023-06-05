@@ -77,7 +77,7 @@ else
     server_private_key=$(</ssl/wireguard/private_key)
 fi
 
-# Get the server pubic key
+# Get the server public key
 if bashio::config.has_value 'server.public_key'; then
     server_public_key=$(bashio::config 'server.public_key')
 else
