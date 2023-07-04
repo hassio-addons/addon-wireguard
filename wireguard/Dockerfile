@@ -16,7 +16,7 @@ RUN \
         go=1.20.5-r0 \
         iptables=1.8.9-r2 \
         libqrencode=4.1.1-r1 \
-        openresolv=3.13.1-r0 \
+        openresolv=3.13.2-r0 \
         wireguard-tools=1.0.20210914-r3 \
     \
     && ln -sf /sbin/xtables-nft-multi /sbin/ip6tables \
