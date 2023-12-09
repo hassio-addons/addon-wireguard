@@ -10,12 +10,12 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN \
     apk add --no-cache --virtual .build-dependencies \
         build-base=0.5-r3 \
-        git=2.40.1-r0 \
+        git=2.43.0-r0 \
     \
     && apk add --no-cache \
-        go=1.20.11-r0 \
-        iptables=1.8.9-r2 \
-        libqrencode=4.1.1-r1 \
+        go=1.21.5-r0 \
+        iptables=1.8.10-r1 \
+        libqrencode=4.1.1-r2 \
         openresolv=3.13.2-r0 \
         wireguard-tools=1.0.20210914-r3 \
     \
