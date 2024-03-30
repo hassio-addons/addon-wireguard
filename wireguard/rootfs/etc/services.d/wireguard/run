@@ -3,21 +3,3 @@
 # Home Assistant Community Add-on: WireGuard
 # Runs WireGuard
 # ==============================================================================
-declare interface
-
-s6-svc -O /run/service/wireguard
-
-bashio::log.info "Starting WireGuard..."
-
-# This is alpha software. We need to set this to instruct
-# WireGuard we are OK to go.
-export WG_I_PREFER_BUGGY_USERSPACE_TO_POLISHED_KMOD=1
-
-# Get the interface
-interface="wg0"
-if bashio::config.has_value "server.interface"; then
-    interface=$(bashio::config "server.interface")
-fi
-
-# Run the WireGuard
-exec wg-quick up "${interface}"
