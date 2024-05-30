@@ -248,7 +248,7 @@ practice perspective, it is strongly advised to manually provide a public key
 for each of your peers. In that case, the add-on will not generate or configure
 a private key by itself.**
 
-### Option: `peers.allowed_ips` _(optional)_
+### Option: `peers.allowed_ips`
 
 **This configuration only valid for the add-on/server end and does not
 affect client configurations!**
@@ -263,7 +263,7 @@ listed in `peers.addresses`.
 The catch-all `0.0.0.0/0` may be specified for matching all IPv4 addresses,
 and `::/0` may be specified for matching all IPv6 addresses.
 
-### Option: `peers.client_allowed_ips` _(optional)_
+### Option: `peers.client_allowed_ips`
 
 **This configuration only valid for the peer end/client configuration and does
 not affect the server/add-on!**
