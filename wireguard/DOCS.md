@@ -1,4 +1,4 @@
-# Home Assistant Community Add-on: WireGuard
+l# Home Assistant Community Add-on: WireGuard
 
 [WireGuard®][wireguard] is an extremely simple yet fast and modern VPN that
 utilizes state-of-the-art cryptography. It aims to be faster, simpler, leaner,
@@ -174,6 +174,37 @@ iptables -A FORWARD -i %i -j ACCEPT
 iptables -A FORWARD -o %i -j ACCEPT
 iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 ```
+
+Moreover you would like to access only your HomeAssistant machine, not all
+the devices from your LAN network. To do so, you can use this example of 
+server-side configuration:
+
+```yaml
+host: myautomatedhome.duckdns.org
+addresses:
+  - 172.27.66.1
+dns: []
+post_up: >-
+  iptables -A FORWARD -i %i -d <internal-ip-address-of-your-HomeAssistant-instance> -j ACCEPT;
+  iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT;
+  iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE;
+  iptables -A FORWARD -i %i -o %o -j ACCEPT;
+  iptables -A FORWARD -i %i -d <LAN-IP-ADDRESS>/24 -j DROP
+```
+
+In this configuration, you would need to change two things:
+- `<internal-ip-address-of-your-HomeAssistant-instance>`  
+with your internal IP address of the HomeASsistant host, for example: 
+`192.168.0.12` 
+- `<LAN-IP-ADDRESS>` your destination IP range, specifying the LAN subnet. 
+Lets assume your HomeAssistant host have IP `192.168.0.12` , then your 
+IP range would be `192.168.0.0`. Suffix `/24` is a way of subnet mask 
+specifying in CIDR, and usually you should not be worried by this. 
+
+**Hint**
+If you would like to access more than your HomeAssistant device, you can just 
+additional `iptables` commands before this command:
+- `iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT;`
 
 ### Option: `server.post_down` _(optional)_
 
