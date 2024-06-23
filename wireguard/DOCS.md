@@ -202,9 +202,36 @@ IP range would be `192.168.0.0`. Suffix `/24` is a way of subnet mask
 specifying in CIDR, and usually you should not be worried by this. 
 
 **Hint**
+
 If you would like to access more than your HomeAssistant device, you can just 
 additional `iptables` commands before this command:
 - `iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT;`
+
+Finally your yaml `post_up` section may look like:
+```yaml
+post_up: >-
+  iptables -A FORWARD -i %i -d <internal-ip-address-of-your-HomeAssistant-instance> -j ACCEPT;
+  iptables -A FORWARD -i %i -d <internal-ip-address-of-any-additional-lan-device> -j ACCEPT;
+  iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT;
+  iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE;
+  iptables -A FORWARD -i %i -o %o -j ACCEPT;
+  iptables -A FORWARD -i %i -d <LAN-IP-ADDRESS>/24 -j DROP
+```
+
+Example config of `post_up` section, with two LAN devices accessible:
+```yaml
+host: myautomatedhome.duckdns.org
+addresses:
+  - 172.27.66.1
+dns: []
+post_up: >-
+  iptables -A FORWARD -i %i -d 192.168.0.13 -j ACCEPT;  
+  iptables -A FORWARD -i %i -d 192.168.0.37 -j ACCEPT;
+  iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT;  
+  iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE;  
+  iptables -A FORWARD -i %i -o %o -j ACCEPT;  
+  iptables -A FORWARD -i %i -d 192.168.0.0/24 -j DROP
+```
 
 ### Option: `server.post_down` _(optional)_
 
