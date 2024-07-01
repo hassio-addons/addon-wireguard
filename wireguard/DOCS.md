@@ -292,7 +292,7 @@ By default or when unspecified, this option is set to 25 seconds. This is
 different from the WireGuard default, since the use case for this add-on is
 most likely to be installed in home setups behind a NAT.
 
-If set to "off", this option is disabled.
+If set to 0, this option is disabled.
 
 ### Option: `peers.endpoint` _(optional)_
 
