@@ -1,8 +1,16 @@
 # Home Assistant Community Add-on: WireGuard
 
 [WireGuard®][wireguard] is an extremely simple yet fast and modern VPN that
-utilizes state-of-the-art cryptography. It aims to be faster, simpler, leaner,
-and more useful than IPsec, while avoiding the massive headache.
+utilizes state-of-the-art cryptography. This add-on allows you to use your 
+Home Assistant add-on as a bridge server, and easily configure and connect
+client devices.
+
+**Note**: installing this add-on does not expose the HA interface to connected
+WireGuard peers.
+
+## About WireGuard
+WireGuard aims to be faster, simpler, leaner, and more useful than IPsec,
+while avoiding the massive headache.
 
 It intends to be considerably more performant than OpenVPN. WireGuard is
 designed as a general-purpose VPN for running on embedded interfaces and
