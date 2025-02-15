@@ -1,4 +1,4 @@
-ARG BUILD_FROM=ghcr.io/hassio-addons/base:16.3.6
+ARG BUILD_FROM=ghcr.io/hassio-addons/base:17.1.4
 # hadolint ignore=DL3006
 FROM ${BUILD_FROM}
 
@@ -8,23 +8,26 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # Setup base
 # hadolint ignore=DL3003
 RUN \
+    apk add --no-cache musl && \
     apk add --no-cache --virtual .build-dependencies \
         build-base=0.5-r3 \
-        git=2.45.3-r0 \
-    \
-    && apk add --no-cache \
-        go=1.22.10-r0 \
-        iptables=1.8.10-r3 \
+        git=2.47.2-r0
+
+RUN \
+    apk add --no-cache \
+        go=1.23.6-r0 \
+        iptables=1.8.11-r1 \
         libqrencode-tools=4.1.1-r2 \
-        openresolv=3.13.2-r0 \
+        openresolv=3.13.2-r1 \
         wireguard-tools=1.0.20210914-r4 \
     \
     && ln -sf /sbin/xtables-nft-multi /sbin/ip6tables \
     && ln -sf /sbin/xtables-nft-multi /sbin/iptables \
-    && git clone --branch "0.0.20230223" --depth=1 \
+    && git clone --branch "master" \
         "https://git.zx2c4.com/wireguard-go" /tmp/wireguard \
     \
     && cd /tmp/wireguard \
+    && git checkout 12269c2761734b15625017d8565745096325392f \
     && make \
     && make install \
     \
