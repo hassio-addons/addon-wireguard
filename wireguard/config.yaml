@@ -8,7 +8,6 @@ codenotary: codenotary@frenck.dev
 arch:
   - aarch64
   - amd64
-  - armv7
 init: false
 ports:
   80/tcp: null
