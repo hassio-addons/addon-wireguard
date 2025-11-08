@@ -4,7 +4,6 @@ version: dev
 slug: wireguard
 description: Fast, modern, secure VPN tunnel
 url: https://github.com/hassio-addons/addon-wireguard
-codenotary: codenotary@frenck.dev
 arch:
   - aarch64
   - amd64
