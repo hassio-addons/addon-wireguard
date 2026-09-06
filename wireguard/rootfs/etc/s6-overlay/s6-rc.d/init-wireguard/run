@@ -7,6 +7,7 @@
 declare -a list
 declare addresses
 declare allowed_ips
+declare checked
 declare config
 declare config_dir
 declare dns
@@ -20,15 +21,18 @@ declare mtu
 declare name
 declare peer_private_key
 declare peer_public_key
+declare peer_www_dir
 declare port
 declare post_down
 declare post_up
 declare pre_down
 declare pre_shared_key
 declare pre_up
+declare qr_b64
 declare server_private_key
 declare server_public_key
 declare table
+declare www_dir
 
 if ! bashio::fs.directory_exists '/ssl/wireguard'; then
     mkdir -p /ssl/wireguard ||
@@ -296,3 +300,147 @@ for peer in $(bashio::config 'peers|keys'); do
     filename=$(sha1sum <<< "${peer_public_key}" | awk '{ print $1 }')
     echo -n "${name}" > "/var/lib/wireguard/${filename}"
 done
+
+# Generate web interface files if enabled. These contain private-key-bearing
+# QR codes and client configs, so they are only ever served behind Home
+# Assistant Ingress (see s6-rc.d/webui/run), never on a raw open port.
+# Wiped unconditionally first, so turning the option off also drops the key
+# material generated while it was on.
+www_dir="/var/lib/wireguard/www"
+rm -rf "${www_dir}" ||
+    bashio::exit.nok "Could not remove stale web interface files"
+
+if bashio::config.true 'web_interface'; then
+    bashio::log.info "Building web interface files..."
+
+    # First emitted card is the one shown on load.
+    checked=" checked"
+
+    # 0700/0600 throughout: the tree holds peer private keys.
+    install -d -m 0700 "${www_dir}/configs" ||
+        bashio::exit.nok "Could not create web interface folder"
+
+    # HTML header. Created empty with an explicit mode first — the page embeds
+    # every peer's private key, and `>` alone would leave it at the umask.
+    install -m 0600 /dev/null "${www_dir}/index.html" ||
+        bashio::exit.nok "Could not create web interface index"
+
+    cat > "${www_dir}/index.html" << 'HTMLEOF'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WireGuard — Peers</title>
+<style>
+body{font-family:system-ui,sans-serif;background:#0f172a;color:#e2e8f0;margin:0;padding:2rem}
+h1{color:#38bdf8;margin:0 0 1.5rem}
+/* CSS-only tabs: one QR at a time, so a phone camera has a single target.
+   The radio stays focusable (arrow keys switch peers); order:1 pushes the
+   selected card below the whole label row. */
+.peers{display:flex;flex-wrap:wrap;gap:.5rem;align-items:flex-start}
+.peers input{position:absolute;opacity:0;width:1px;height:1px}
+.peers label{padding:.5rem 1rem;background:#1e293b;border-radius:.375rem;
+     cursor:pointer;font-size:.875rem;word-break:break-all}
+.peers input:checked + label{background:#0ea5e9;color:#fff}
+.peers input:focus-visible + label{outline:2px solid #38bdf8;outline-offset:2px}
+.peer{display:none;order:1;width:100%;box-sizing:border-box;
+      background:#1e293b;border-radius:.75rem;padding:1.5rem;text-align:center}
+.peers input:checked + label + .peer{display:block}
+.peer h2{margin:0 0 1rem;color:#38bdf8;font-size:1rem;word-break:break-all}
+/* qrencode emits a small PNG; scaling it up with smoothing softens the
+   module edges and phones struggle. Keep them square. */
+.peer img{display:block;margin:0 auto 1rem;max-width:260px;width:100%;
+     border-radius:.5rem;background:#fff;image-rendering:pixelated}
+.btn{display:inline-block;padding:.5rem 1.25rem;background:#0ea5e9;color:#fff;
+     border-radius:.375rem;text-decoration:none;font-size:.875rem}
+.btn:hover{background:#38bdf8;color:#0f172a}
+</style>
+</head>
+<body>
+<h1>WireGuard Peers</h1>
+<div class="peers">
+HTMLEOF
+
+    # Add a card for every peer.
+    # SECURITY BOUNDARY: peer name is the only user value interpolated into the
+    # HTML and file paths below. It is safe unescaped ONLY because config.yaml
+    # constrains it to
+    #   match(^[a-zA-Z0-9\d](?:[a-zA-Z0-9\d]|-(?=[a-zA-Z0-9\d])){0,32}$)
+    # — at most 33 characters drawn from [a-zA-Z0-9-], so no quote, angle
+    # bracket, slash or dot can reach the page or a path. Do not relax that
+    # schema without adding HTML-escaping and path sanitisation here.
+    for peer in $(bashio::config 'peers|keys'); do
+        name=$(bashio::config "peers[${peer}].name")
+        config_dir="/ssl/wireguard/${name}"
+
+        # Both files are generated for every peer in the loop above, so this
+        # should never trigger — but skip (with a warning) rather than emit a
+        # broken card if one is missing, e.g. after a failed qrencode run.
+        if ! bashio::fs.file_exists "${config_dir}/client.conf" \
+            || ! bashio::fs.file_exists "${config_dir}/qrcode.png"; then
+            bashio::log.warning \
+                "Skipping web card for ${name}: client.conf or qrcode.png missing"
+            continue
+        fi
+
+        # Read the QR code as a base64 data URI *before* touching index.html:
+        # a failed read must skip the peer, not append a card with a broken
+        # <img> to the page. Note this deliberately does not pipe into
+        # `tr -d '\n'` to unwrap base64's 76-column output: the pipeline's exit
+        # status would be tr's, so a base64 that dies partway through — leaving
+        # a truncated data URI — would still look like success. Strip the
+        # newlines in the shell instead, keeping base64's own status.
+        if ! qr_b64=$(base64 "${config_dir}/qrcode.png" 2>/dev/null) \
+            || bashio::var.is_empty "${qr_b64}"; then
+            bashio::log.warning \
+                "Skipping web card for ${name}: could not read qrcode.png"
+            continue
+        fi
+        qr_b64="${qr_b64//$'\n'/}"
+
+        # Make the client config available for download, from a per-peer
+        # subdirectory so the served basename is always "client.conf". A flat
+        # "configs/${name}.conf" would become "httpd.conf" for a peer named
+        # "httpd" (a schema-valid name), which BusyBox httpd reserves as its
+        # per-directory config file and refuses to serve (403).
+        # 0700/0600 rather than the umask default: this tree holds every peer's
+        # private key. ${www_dir} is recreated from scratch above, so there is
+        # no previous copy to preserve — on failure just drop the peer's
+        # directory again, so the page never links to a config that is missing
+        # or truncated. A failed card skips the peer rather than aborting init:
+        # the VPN itself must not stop serving because a QR page could not be
+        # built.
+        peer_www_dir="${www_dir}/configs/${name}"
+        if ! install -d -m 0700 "${peer_www_dir}" \
+            || ! install -m 0600 "${config_dir}/client.conf" \
+                "${peer_www_dir}/client.conf"; then
+            bashio::log.warning \
+                "Skipping web card for ${name}: could not publish client.conf"
+            rm -rf "${peer_www_dir}"
+            continue
+        fi
+
+        {
+            echo "  <input type=\"radio\" name=\"peer\" id=\"peer-${name}\"${checked}>"
+            echo "  <label for=\"peer-${name}\">${name}</label>"
+            echo "  <div class=\"peer\">"
+            echo "    <h2>${name}</h2>"
+            echo "    <img src=\"data:image/png;base64,${qr_b64}\" alt=\"QR code for ${name}\">"
+            echo "    <a class=\"btn\" href=\"configs/${name}/client.conf\" download=\"${name}.conf\">&#x2B07; Download Config</a>"
+            echo "  </div>"
+        } >> "${www_dir}/index.html"
+
+        # Only the first card that actually made it onto the page is preselected.
+        checked=""
+    done
+
+    # HTML footer
+    cat >> "${www_dir}/index.html" << 'HTMLEOF'
+</div>
+</body>
+</html>
+HTMLEOF
+
+    bashio::log.info "Web interface ready – open it via the app's Ingress UI"
+fi

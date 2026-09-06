@@ -1,0 +1,29 @@
+#!/command/with-contenv bashio
+# shellcheck shell=bash
+# ==============================================================================
+# Home Assistant Community App: WireGuard
+# Serves the optional web interface (QR codes + client config downloads).
+#
+# The served files contain the peers' private keys, so they are exposed ONLY
+# through Home Assistant Ingress (see `ingress` in config.yaml) — never on a
+# raw, unauthenticated port. This runs independently of the status API service,
+# which keeps serving JSON on port 80 unchanged.
+#
+# 8099 is Home Assistant's default `ingress_port`, which is why config.yaml
+# does not declare one. Change both together or Ingress stops reaching this.
+# ==============================================================================
+
+if ! bashio::config.true 'web_interface'; then
+    # `ingress: true` is static, so Home Assistant shows the "Open Web UI"
+    # button regardless. Serve a notice instead of exiting: an empty port there
+    # reads as a broken app rather than a disabled feature. The notice ships
+    # in the image (rootfs/var/www-disabled) rather than being written here:
+    # it is a constant, and generating it at every start only adds a way to end
+    # up serving an empty document root.
+    exec httpd -f -p 8099 -c /etc/httpd.conf -h /var/www-disabled
+fi
+
+bashio::log.info "Starting WireGuard web interface behind Ingress (port 8099)..."
+# httpd is provided by the busybox-extras package (stock busybox lacks the
+# applet). -c applies the Ingress-only source-IP allowlist (see /etc/httpd.conf).
+exec httpd -f -p 8099 -c /etc/httpd.conf -h /var/lib/wireguard/www

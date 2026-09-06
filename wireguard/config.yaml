@@ -15,6 +15,7 @@ ports_description:
   80/tcp: WireGuard peers status API
   51820/udp: "WireGuard: forward this port in your router"
 hassio_api: true
+ingress: true
 privileged:
   - NET_ADMIN
 devices:
@@ -22,6 +23,7 @@ devices:
 map:
   - ssl:rw
 options:
+  web_interface: false
   server:
     host: myautomatedhome.duckdns.org
     addresses:
@@ -35,6 +37,7 @@ options:
       client_allowed_ips: []
 schema:
   log_level: list(trace|debug|info|notice|warning|error|fatal)?
+  web_interface: bool?
   server:
     host: str
     interface: match(^wg([0-9])+$)?

@@ -19,3 +19,20 @@ permissions:
 jobs:
   workflows:
     uses: hassio-addons/workflows/.github/workflows/app-ci.yaml@e0c532a7b0fb264b3ff0c718c2c0308a0c8c1390 # v4.0.0
+
+  webui-smoke:
+    name: Web UI Ingress ACL smoke test
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⤵️ Check out code from GitHub
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # The job runs repository-controlled shell after checkout; no later
+          # step authenticates to Git, so do not leave a token in .git/config.
+          persist-credentials: false
+      # Asserts against what the add-on declares, so a dropped busybox-extras
+      # or a loosened Ingress ACL cannot pass unnoticed.
+      - name: 🚀 Verify httpd availability and Ingress-only ACL
+        run: bash wireguard/tests/webui-acl-smoke.sh
+      - name: 🚀 Verify the web UI shows one QR code at a time
+        run: bash wireguard/tests/webui-single-qr.sh
